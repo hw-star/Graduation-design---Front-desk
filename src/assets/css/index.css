@@ -68,6 +68,14 @@ a:-webkit-any-link{
   font-weight: bold;
   font-size: 1.2em;
 }
+.applogin-container .nav_set .nav_set_right ul li img{
+  float: right;
+  margin: 12px 20px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  overflow: hidden;
+}
 .applogin-container h1 i{
   font-size: 2.2rem;
 }

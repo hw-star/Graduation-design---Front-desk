@@ -10,7 +10,7 @@
             >
           </li>
           <li>
-            <router-link to="/about">活动</router-link>
+            <router-link to="/activity">活动</router-link>
           </li>
           <li>
             <router-link to="/about">导航</router-link>
@@ -18,7 +18,7 @@
         </ul>
       </div>
       <div class="nav_set_right">
-        <ul>
+        <ul v-if="isLoginOrNologin">
           <li>
             <el-button type="text" @click="centerforregister = true">
               <i class="iconfont iconzhuce"></i>注册
@@ -28,6 +28,18 @@
             <el-button type="text" @click="centerforlogin = true">
               <i class="iconfont icondenglu"></i>登录
             </el-button>
+          </li>
+        </ul>
+        <ul v-else>
+          <li>
+            <el-button type="text" @click="centerforlogin = true">
+              <i class="iconfont icontuichu1"></i>退出
+            </el-button>
+          </li>
+          <li>
+            <router-link to="/about"
+              ><img :src="this.$store.state.avatar"
+            /></router-link>
           </li>
         </ul>
       </div>
@@ -64,6 +76,7 @@
             <el-button
               style="width: 39%"
               type="primary"
+              :loading="loading"
               @click="submitFormlogin()"
               >登录</el-button
             >
@@ -150,7 +163,6 @@
 
 <script>
 import { createcanvasline } from "../assets/js/createcanvasline";
-import userOperation from "../api/user";
 export default {
   name: "Home",
   mounted() {
@@ -173,21 +185,33 @@ export default {
       },
       centerforlogin: false,
       centerforregister: false,
+      loading: false,
+      isLoginOrNologin: true,
     };
   },
   methods: {
     submitFormlogin() {
-      userOperation
-        .login(this.ruleFormlogin)
-        .then((response) => {
-          this.$router.push({ name: "Home", path: "/" });
+      this.loading = true;
+      this.$store
+        .dispatch("login", this.ruleFormlogin)
+        .then(() => {
+          this.$store
+            .dispatch("getInfo", this.$store.state.token)
+            .then(() => {
+              this.isLoginOrNologin = false;
+              this.$message({
+                message: "登录成功！",
+                type: "success",
+              });
+            })
+            .catch((error) => {});
+          this.$router.push({ path: "/" });
           this.centerforlogin = false;
-          this.$message({
-            type: "success",
-            message: "登录成功!",
-          });
+          this.loading = false;
         })
-        .catch((error) => {});
+        .catch((error) => {
+          this.loading = false;
+        });
     },
     resetFormlogin() {
       this.ruleFormlogin.resetFields();
@@ -197,8 +221,6 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 @import "../assets/css/index.css";
 </style>
-
-
