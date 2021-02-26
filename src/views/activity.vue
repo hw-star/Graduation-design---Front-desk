@@ -17,7 +17,7 @@
               <router-link to="/activity">活动</router-link>
             </li>
             <li>
-              <router-link to="/about">导航</router-link>
+              <router-link to="/navigation">导航</router-link>
             </li>
           </ul>
         </div>
@@ -140,7 +140,7 @@
           <el-form-item label="性别" prop="registersex">
             <el-radio v-model="sex" label="1">男</el-radio>
             <el-radio v-model="sex" label="2">女</el-radio>
-            <spon>注：登陆后可更换头像</spon>
+            <el-tag type="info">注：登陆后可更换头像</el-tag>
           </el-form-item>
           <el-form-item>
             <el-button
@@ -160,81 +160,100 @@
     </div>
 
     <div id="data_list">
-       <!--查询-->
-   <el-form :inline="true" class="demo-form-inline">
-      <el-form-item>
-        <el-input v-model="activityBody.fuzzyquery" placeholder="活动号或者名称"/>
-      </el-form-item>
-      <el-form-item label="添加时间">
-        <el-date-picker
-          v-model="activityBody.begin"
-          type="datetime"
-          placeholder="选择开始时间"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          default-time="00:00:00"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-date-picker
-          v-model="activityBody.end"
-          type="datetime"
-          placeholder="选择截止时间"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          default-time="00:00:00"
-        />
-      </el-form-item>
+      <!--查询-->
+      <el-form :inline="true" class="demo-form-inline">
+        <el-form-item>
+          <el-input
+            v-model="activityBody.fuzzyquery"
+            placeholder="活动号或者名称"
+          />
+        </el-form-item>
+        <el-form-item label="添加时间">
+          <el-date-picker
+            v-model="activityBody.begin"
+            type="datetime"
+            placeholder="选择开始时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            default-time="00:00:00"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-date-picker
+            v-model="activityBody.end"
+            type="datetime"
+            placeholder="选择截止时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            default-time="00:00:00"
+          />
+        </el-form-item>
 
-      <el-button type="primary" icon="el-icon-search" @click="getlist()">查询</el-button>
-      <el-button type="default" @click="resetData()">清空</el-button>
-    </el-form>
-    <!--数据展示-->
-    <el-table
-      :data="list"
-      v-loading="loading"
-      style="width: 100%; height: 469.6px"
-    >
-      <el-table-column label="序号" width="80" align="center">
-        <template slot-scope="scope">
-          {{ (page - 1) * limit + scope.$index + 1 }}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="活动号" prop="id">
-      </el-table-column>
-      <el-table-column align="center" label="名称" prop="actName">
-      </el-table-column>
-      <el-table-column align="center" label="需求人数" prop="actNumber">
-      </el-table-column>
-      <el-table-column align="center" label="已报人数" prop="actNumbered">
-      </el-table-column>
-      <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
-          <router-link :to="'/manageactivity/details/' + scope.row.id">
-            <el-button style="margin: 0px 4px" size="mini">详情</el-button>
-          </router-link>
-          <el-button
-            style="margin: 0px 4px"
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-            >申请</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-    <!--分页-->
-    <el-footer class="footerPage">
-      <el-pagination
-        background
-        align="center"
-        style="padding: 30px 0; text-align: center"
-        layout="total, prev, pager, next, jumper"
-        @current-change="getlist"
-        :total="total"
-        :current-page="page"
-        :page-size="limit"
+        <el-button type="primary" icon="el-icon-search" @click="getlist()"
+          >查询</el-button
+        >
+        <el-button type="default" @click="resetData()">清空</el-button>
+      </el-form>
+      <!--数据展示-->
+
+      <el-table
+        :data="list"
+        v-loading="loading"
+        style="width: 100%; height: 469.6px"
       >
-      </el-pagination>
-    </el-footer>
+        <el-table-column label="序号" width="80" align="center">
+          <template slot-scope="scope">
+            {{ (page - 1) * limit + scope.$index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="活动号" prop="id">
+        </el-table-column>
+        <el-table-column align="center" label="名称" prop="actName">
+        </el-table-column>
+        <el-table-column align="center" label="需求/已报人数">
+          <template slot-scope="scope">
+            {{ scope.row.actNumber + "/" + scope.row.actNumbered }}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="开始时间" prop="actUpdate">
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-popover
+              placement="left-start"
+              :title="`活动号：${scope.row.id}\u3000\u3000可报人数：${scope.row.actNumber-scope.row.actNumbered}\u3000\u3000时间：${scope.row.actUpdate}`"
+              width="480"
+              trigger="hover"
+              :content="`描述：${scope.row.actDescription}`"
+            >
+              <el-button slot="reference" style="margin: 0px 4px" size="mini"
+                >活动描述</el-button
+              >
+            </el-popover>
+
+            <el-button
+              style="margin: 0px 4px"
+              size="mini"
+              type="danger"
+              @click="signUpActivity(scope.row.id)"
+              >申请</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!--分页-->
+      <el-footer class="footerPage">
+        <el-pagination
+          background
+          align="center"
+          style="padding: 30px 0; text-align: center"
+          layout="total, prev, pager, next, jumper"
+          @current-change="getlist"
+          :total="total"
+          :current-page="page"
+          :page-size="limit"
+        >
+        </el-pagination>
+      </el-footer>
     </div>
   </div>
 </template>
@@ -244,7 +263,7 @@ import activity from "../api/activity";
 export default {
   name: "Home",
   created() {
-     this.getlist();
+    this.getlist();
   },
   data() {
     return {
@@ -270,7 +289,6 @@ export default {
       },
       centerforlogin: false,
       centerforregister: false,
-      loading: false,
       isLoginOrNologin: true,
     };
   },
@@ -290,7 +308,7 @@ export default {
               });
             })
             .catch((error) => {});
-          this.$router.push({ path: "/" });
+          this.$router.push({ path: "/activity" });
           this.centerforlogin = false;
           this.loading = false;
         })
@@ -304,8 +322,7 @@ export default {
     submitFormregister(data) {},
     resetFormregister() {},
 
-
-     getlist(page = 1) {
+    getlist(page = 1) {
       this.page = page;
       activity
         .getActivityListPage(this.page, this.limit, this.activityBody)
@@ -315,34 +332,27 @@ export default {
           this.loading = false;
         });
     },
-    handleDelete(id) {
-      this.$confirm("此操作将删除该活动, 是否继续?", "提示", {
+    signUpActivity(id) {
+      this.$confirm("此操作将报名该活动, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      }).then(() => {
-        manageactivity.deleteActivityId(id).then((response) => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
+      })
+        .then(() => {
+          // 此方法暂时未实现
+          manageactivity.signUpActivity(id).then((response) => {
+            this.$message({
+              type: "success",
+              message: "报名成功!",
+            });
+            this.getlist();
           });
-          this.getlist();
-        });
-      }).catch((error) =>{
-        
-      });
+        })
+        .catch((error) => {});
     },
     resetData() {
       this.activityBody = {};
       this.getlist();
-    },
-    activityStop(id, stateCode) {
-      manageactivity.StopActivity(id, stateCode).then((response) => {
-        this.$message({
-          type: "success",
-          message: "操作成功!",
-        });
-      });
     },
   },
 };
