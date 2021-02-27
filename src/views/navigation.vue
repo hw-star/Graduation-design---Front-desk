@@ -224,7 +224,6 @@
 
 <script>
 // import activity from "../api/activity";
-import axios from "axios";
 export default {
   name: "Navigation",
   created() {},
