@@ -1,5 +1,5 @@
 <template>
-  <div class="applogin">
+  <div class="applogin_navigation">
     <div id="nav_set_fix">
       <nav class="nav_set">
         <div class="nav_set_left">

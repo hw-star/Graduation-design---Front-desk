@@ -21,11 +21,15 @@ body{
   font-weight: bold;
   font-size: 1.2em;
 }
+.applogin .nav_set .nav_set_left ul li:nth-child(2){
+  border-bottom: 3px solid #4169e1;
+}
 .applogin a:-webkit-any-link{
   color: black;
 }
 .applogin .nav_set .nav_set_right ul li button:hover,.applogin .nav_set .nav_set_left ul li:hover{
   border-radius: 16px;
+  border-bottom: none;
   background: rgba(211, 211, 211, .8);
   box-shadow: 0px 0px 8px 4px rgb(211, 211, 211);
   cursor: pointer;

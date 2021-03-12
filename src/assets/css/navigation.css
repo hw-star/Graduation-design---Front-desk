@@ -4,16 +4,16 @@
 body{
   background-color: rgb(239, 243, 245);
 }
-.applogin .nav_set{
+.applogin_navigation .nav_set{
   margin: 0px 160px;
 }
-.applogin #nav_set_fix{
+.applogin_navigation #nav_set_fix{
   width: 100%;
   background-color: rgba(255, 255, 255, .8);
   height: 3.7em;
   box-shadow: 0px 0px 40px 20px rgb(239, 243, 245);
 }
-.applogin .nav_set .nav_set_left ul li{
+.applogin_navigation .nav_set .nav_set_left ul li{
   float: left;
   color: black;
   padding: 10px 20px;
@@ -21,16 +21,20 @@ body{
   font-weight: bold;
   font-size: 1.2em;
 }
-.applogin a:-webkit-any-link{
+.applogin_navigation .nav_set .nav_set_left ul li:nth-child(3){
+  border-bottom: 3px solid #4169e1;
+}
+.applogin_navigation a:-webkit-any-link{
   color: black;
 }
-.applogin .nav_set .nav_set_right ul li button:hover,.applogin .nav_set .nav_set_left ul li:hover{
+.applogin_navigation .nav_set .nav_set_right ul li button:hover,.applogin_navigation .nav_set .nav_set_left ul li:hover{
   border-radius: 16px;
+  border-bottom: none;
   background: rgba(211, 211, 211, .8);
   box-shadow: 0px 0px 8px 4px rgb(211, 211, 211);
   cursor: pointer;
 }
-.applogin .nav_set .nav_set_right ul li button{
+.applogin_navigation .nav_set .nav_set_right ul li button{
   float: right;
   color: black;
   padding: 11px 20px;
@@ -38,7 +42,7 @@ body{
   font-weight: bold;
   font-size: 1.2em;
 }
-.applogin .nav_set .nav_set_right ul li img{
+.applogin_navigation .nav_set .nav_set_right ul li img{
   float: right;
   margin: 12px 20px;
   width: 28px;
@@ -46,20 +50,20 @@ body{
   border-radius: 6px;
   overflow: hidden;
 }
-.applogin h1 i{
+.applogin_navigation h1 i{
   font-size: 2.2rem;
 }
-.applogin .el-dialog{
+.applogin_navigation .el-dialog{
   border-radius: 24px;
 }
-.applogin .el-dialog__title{
+.applogin_navigation .el-dialog__title{
   text-align: center;
   font-weight: bold;
 }
-.applogin .el-input{
+.applogin_navigation .el-input{
   width: 90%;
 }
-.applogin .el-form-item__label{
+.applogin_navigation .el-form-item__label{
   text-align: center;
   font-size: 18px;
   font-weight: bold;
@@ -67,53 +71,59 @@ body{
 .applogin .el-button+.el-button{
   margin-left: 38px;
 }
-.applogin .set_login .el-input__inner:hover,.applogin .set_register .el-input__inner:hover{
+.applogin_navigation .set_login .el-input__inner:hover,.applogin_navigation .set_register .el-input__inner:hover{
   box-shadow: 0px 0px 8px 4px rgb(64 158 255);
 }
-.applogin .set_login .el-input__inner:focus,.applogin .set_register .el-input__inner:focus{
+.applogin_navigation .set_login .el-input__inner:focus,.applogin_navigation .set_register .el-input__inner:focus{
   box-shadow: 0px 0px 1px 1px #4169e1;
 }
-.applogin .set_login .divgetPwd{
+.applogin_navigation .set_login .divgetPwd{
   display: inline;
   position: absolute;
   right: 10%
 }
-.applogin #data_list{
+.applogin_navigation #data_list{
   margin: 20px 170px 0px 170px;
 }
-.applogin #data_list .navigation_baidu{
+.applogin_navigation #data_list .navigation_baidu{
   background-color: rgb(255, 255, 255);
   height: 100px;
   padding: auto;
+  border-radius: 8px;
 }
-.applogin #data_list .navigation_baidu .logo_baidu{
+.applogin_navigation #data_list .navigation_baidu .logo_baidu{
   display: inline-block;
   margin: 10px 0px 10px 300px;
 }
-.applogin #data_list .navigation_baidu .contianer_baidu{
+.applogin_navigation #data_list .navigation_baidu .contianer_baidu{
   display: inline-block;
   position: absolute;
   top: 114px;
   left: 730px;
 }
-.applogin #data_list .navigation_baidu .logo_baidu img{
+.applogin_navigation #data_list .navigation_baidu .logo_baidu img{
   width: 200px;
   height: 70px;
 }
-.applogin #data_list .recommended{
+.applogin_navigation #data_list .recommended{
   margin-top: 20px;
   background-color: rgb(255, 255, 255);
   height: 100px;
-  padding: 10px 0px
+  padding: 10px 0px;
+  border-radius: 8px;
 }
-.applogin #data_list .recommended .listLink{
+.applogin_navigation #data_list .recommended .listLink{
   padding: 30px 130px;
   font-size: 1.2em;
 }
-.applogin #data_list .talk{
+.applogin_navigation #data_list .recommended .listLink span a:hover{
+  color: #409eff;
+}
+.applogin_navigation #data_list .talk{
   margin-top: 20px;
   background-color: rgb(255, 255, 255);
   height: 280px;
   padding: 30px 40px;
   font-size: 1.2em;
+  border-radius: 8px;
 }
