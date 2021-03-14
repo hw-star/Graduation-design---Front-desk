@@ -67,6 +67,7 @@ a:-webkit-any-link{
   margin: 6px 20px;
   font-weight: bold;
   font-size: 1.2em;
+  border-bottom: none;
 }
 .applogin-container .nav_set .nav_set_right ul li img{
   float: right;

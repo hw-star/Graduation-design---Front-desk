@@ -76,7 +76,7 @@
             <el-button
               style="width: 39%"
               type="primary"
-              :loading="loading"
+              :loading="loading_login"
               @click="submitFormlogin()"
               >登录</el-button
             >
@@ -247,11 +247,12 @@ export default {
       centerforlogin: false,
       centerforregister: false,
       isLoginOrNologin: true,
+      loading_login: false,
     };
   },
   methods: {
     submitFormlogin() {
-      this.loading = true;
+      this.loading_login = true;
       this.$store
         .dispatch("login", this.ruleFormlogin)
         .then(() => {
@@ -263,11 +264,13 @@ export default {
                 message: "登录成功！",
                 type: "success",
               });
+              this.loading_login = false;
             })
-            .catch((error) => {});
+            .catch((error) => {
+              this.loading_login = false;
+            });
           this.$router.push({ path: "/navigation" });
           this.centerforlogin = false;
-          this.loading = false;
         })
         .catch((error) => {
           this.loading = false;

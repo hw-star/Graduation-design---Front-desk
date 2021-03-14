@@ -76,7 +76,7 @@
             <el-button
               style="width: 39%"
               type="primary"
-              :loading="loading"
+              :loading="loading_login"
               @click="submitFormlogin()"
               >登录</el-button
             >
@@ -197,7 +197,7 @@
       <el-table
         :data="list"
         v-loading="loading"
-        style="width: 100%; height: 469.6px; border-radius:8px"
+        style="width: 100%; height: 469.6px; border-radius: 8px"
       >
         <el-table-column label="序号" width="80" align="center">
           <template slot-scope="scope">
@@ -219,7 +219,9 @@
           <template slot-scope="scope">
             <el-popover
               placement="left-start"
-              :title="`活动号：${scope.row.id}\u3000\u3000可报人数：${scope.row.actNumber-scope.row.actNumbered}\u3000\u3000时间：${scope.row.actUpdate}`"
+              :title="`活动号：${scope.row.id}\u3000\u3000可报人数：${
+                scope.row.actNumber - scope.row.actNumbered
+              }\u3000\u3000时间：${scope.row.actUpdate}`"
               width="480"
               trigger="hover"
               :content="`描述：${scope.row.actDescription}`"
@@ -273,6 +275,7 @@ export default {
       total: 0,
       activityBody: {},
       loading: true,
+      loading_login: false,
 
       titlemesg: '青年志愿者是"奉献、友爱、互助、进步"的精神。',
       sex: "1",
@@ -294,7 +297,7 @@ export default {
   },
   methods: {
     submitFormlogin() {
-      this.loading = true;
+      this.loading_login = true;
       this.$store
         .dispatch("login", this.ruleFormlogin)
         .then(() => {
@@ -306,15 +309,15 @@ export default {
                 message: "登录成功！",
                 type: "success",
               });
+              this.loading_login = false;
             })
-            .catch((error) => {});
+            .catch((error) => {
+              this.loading_login = false;
+            });
           this.$router.push({ path: "/activity" });
           this.centerforlogin = false;
-          this.loading = false;
         })
-        .catch((error) => {
-          this.loading = false;
-        });
+        .catch((error) => {});
     },
     resetFormlogin() {
       this.ruleFormlogin.resetFields();
@@ -330,7 +333,8 @@ export default {
           this.list = response.data.activitydata;
           this.total = response.data.total;
           this.loading = false;
-        }).catch((error) => {});
+        })
+        .catch((error) => {});
     },
     signUpActivity(id) {
       this.$confirm("此操作将报名该活动, 是否继续?", "提示", {

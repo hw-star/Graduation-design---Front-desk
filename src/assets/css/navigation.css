@@ -41,6 +41,7 @@ body{
   margin: 8px 20px;
   font-weight: bold;
   font-size: 1.2em;
+  border-bottom: none;
 }
 .applogin_navigation .nav_set .nav_set_right ul li img{
   float: right;
