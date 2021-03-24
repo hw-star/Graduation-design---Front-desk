@@ -25,6 +25,12 @@ export default new Vuex.Store({
     SET_ROLES: (state, roles) => {
       state.roles = roles;
     },
+    RESET_STATE:(state) =>{
+      state.token = '',
+      state.avatar = '',
+      state.name = '',
+      state.roles = []
+    }
   },
   actions: {
     // user login
@@ -73,10 +79,10 @@ export default new Vuex.Store({
     },
 
     // user logout
-    logout({ commit, state }) {
+    logout({ commit ,state}) {
       return new Promise((resolve, reject) => {
         userOperation
-        .logout(state.token)
+        .logout()
           .then(() => {
             removeToken(); // must remove  token  first
             // resetRouter();
@@ -89,5 +95,4 @@ export default new Vuex.Store({
       });
     },
   },
-  modules: {},
 });

@@ -32,7 +32,7 @@
         </ul>
         <ul v-else>
           <li>
-            <el-button type="text" @click="centerforlogin = true">
+            <el-button type="text" @click="loginout">
               <i class="iconfont icontuichu1"></i>退出
             </el-button>
           </li>
@@ -165,6 +165,14 @@
 import { createcanvasline } from "../assets/js/createcanvasline";
 export default {
   name: "Home",
+  created() {
+    if (window.localStorage.getItem("userMsg")) {
+      this.$store.replaceState(
+        JSON.parse(window.localStorage.getItem("userMsg"))
+      );
+    }
+    this.yzLogin();
+  },
   mounted() {
     createcanvasline();
   },
@@ -218,6 +226,18 @@ export default {
     },
     submitFormregister(data) {},
     resetFormregister() {},
+    yzLogin() {
+      let valid = this.$store.state.avatar;
+      if (valid != "") {
+        this.isLoginOrNologin = false;
+      }
+    },
+    async loginout() {
+      this.isLoginOrNologin = true;
+      await this.$store.dispatch("logout");
+      this.$router.push(`/?redirect=${this.$route.fullPath}`);
+      window.localStorage.removeItem("userMsg");
+    },
   },
 };
 </script>

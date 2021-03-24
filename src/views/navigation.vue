@@ -36,7 +36,7 @@
           </ul>
           <ul v-else>
             <li>
-              <el-button type="text" @click="centerforlogin = true">
+              <el-button type="text" @click="loginout">
                 <i class="iconfont icontuichu1"></i>退出
               </el-button>
             </li>
@@ -180,10 +180,18 @@
       <div class="talk">
         志愿者是指志愿贡献个人的时间及精力，在不为任何物质报酬的情况下，为改善社会服务，促进社会进步而提供服务的人。
         志愿工作具有志愿性、无偿性、公益性、组织性四大特征。参与志愿工作既是“助人”，亦是“自助”，既是“乐人”，同时也“乐己”。参与志愿工作，既是在帮助他人、服务社会，同时也是在传递爱心和传播文明。志愿服务个人化、人性化的特征，可以有效地拉近人与人之间的心灵距离，减少疏远感，对缓解社会矛盾，促进社会稳定有一定的积极作用。
-      <div style="color: #409eff">此模块待完善，以上内容占位</div>
+        <div style="color: #409eff">此模块待完善，以上内容占位</div>
       </div>
       <div class="recommended">
-        <div style="border-left: 5px solid #409eff;padding-left: 10px;font-weight:bold">&nbsp;&nbsp;推荐导航</div>
+        <div
+          style="
+            border-left: 5px solid #409eff;
+            padding-left: 10px;
+            font-weight: bold;
+          "
+        >
+          &nbsp;&nbsp;推荐导航
+        </div>
         <div class="listLink">
           <span
             ><a href="http://www.zgzyz.org.cn/" target="_blank"
@@ -226,7 +234,12 @@
 // import activity from "../api/activity";
 export default {
   name: "Navigation",
-  created() {},
+  created() {
+    if (window.localStorage.getItem("userMsg")) {
+      this.$store.replaceState(JSON.parse(window.localStorage.getItem("userMsg")));
+    }
+    this.yzLogin();
+  },
   data() {
     return {
       wd: "",
@@ -283,6 +296,18 @@ export default {
     resetFormregister() {},
     onSubmit() {
       window.open("https://www.baidu.com/s?wd=" + this.wd);
+    },
+    yzLogin() {
+      let valid = this.$store.state.avatar;
+      if (valid != "") {
+        this.isLoginOrNologin = false;
+      }
+    },
+    async loginout() {
+      this.isLoginOrNologin = true;
+      await this.$store.dispatch("logout");
+      this.$router.push(`/navigation?redirect=${this.$route.fullPath}`);
+      window.localStorage.removeItem("userMsg");
     },
   },
 };

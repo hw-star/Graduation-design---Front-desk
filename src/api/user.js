@@ -17,7 +17,7 @@ export default {
     });
   },
 
-  logout(token) {
+  logout() {
     return request({
       url: '/user/logout',
       method: 'post',

@@ -36,7 +36,7 @@
           </ul>
           <ul v-else>
             <li>
-              <el-button type="text" @click="centerforlogin = true">
+              <el-button type="text" @click="loginout">
                 <i class="iconfont icontuichu1"></i>退出
               </el-button>
             </li>
@@ -265,7 +265,11 @@ import activity from "../api/activity";
 export default {
   name: "Home",
   created() {
+    if (window.localStorage.getItem("userMsg")) {
+      this.$store.replaceState(JSON.parse(window.localStorage.getItem("userMsg")));
+    }
     this.getlist();
+    this.yzLogin();
   },
   data() {
     return {
@@ -337,26 +341,42 @@ export default {
         .catch((error) => {});
     },
     signUpActivity(id) {
-      this.$confirm("此操作将报名该活动, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          // 此方法暂时未实现
-          manageactivity.signUpActivity(id).then((response) => {
-            this.$message({
-              type: "success",
-              message: "报名成功!",
-            });
-            this.getlist();
-          });
+      if (this.$store.state) {
+        this.$confirm("此操作将报名该活动, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         })
-        .catch((error) => {});
+          .then(() => {
+            // 此方法暂时未实现
+            manageactivity.signUpActivity(id).then((response) => {
+              this.$message({
+                type: "success",
+                message: "报名成功!",
+              });
+              this.getlist();
+            });
+          })
+          .catch((error) => {});
+      } else {
+        this.centerforlogin = true;
+      }
     },
     resetData() {
       this.activityBody = {};
       this.getlist();
+    },
+    yzLogin() {
+      let valid = this.$store.state.avatar;
+      if (valid != "") {
+        this.isLoginOrNologin = false;
+      }
+    },
+    async loginout() {
+      this.isLoginOrNologin = true;
+      await this.$store.dispatch("logout");
+      this.$router.push(`/activity?redirect=${this.$route.fullPath}`);
+      window.localStorage.removeItem("userMsg");
     },
   },
 };
