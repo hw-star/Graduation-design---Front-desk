@@ -69,7 +69,7 @@ body{
   font-size: 18px;
   font-weight: bold;
 }
-.applogin .el-button+.el-button{
+.el-button+.el-button{
   margin-left: 38px;
 }
 .applogin_navigation .set_login .el-input__inner:hover,.applogin_navigation .set_register .el-input__inner:hover{
@@ -79,9 +79,10 @@ body{
   box-shadow: 0px 0px 1px 1px #4169e1;
 }
 .applogin_navigation .set_login .divgetPwd{
-  display: inline;
+  display: inline-block;
   position: absolute;
-  right: 10%
+  right: 10%;
+  cursor: pointer;
 }
 .applogin_navigation #data_list{
   margin: 20px 170px 0px 170px;

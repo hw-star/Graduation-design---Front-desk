@@ -1,5 +1,5 @@
 <template>
-  <div class="appabout">
+  <div class="apporder">
     <div id="nav_set_fix">
       <nav class="nav_set">
         <div class="nav_set_left">
@@ -153,119 +153,78 @@
         </el-form>
       </el-dialog>
     </div>
-    <div class="aboutMsg">
-      <el-form label-width="80px" ref="User" :model="User">
-        <el-form-item label="名字" prop="userName">
-          <el-input
-            style="width: 38%"
-            v-model="User.userName"
-            :disabled="isUpdateInformation"
-          />
-        </el-form-item>
-        <el-form-item label="账号">
-          <el-input style="width: 38%" v-model="User.userId" :disabled="true" />
-        </el-form-item>
-        <el-form-item label="密码" prop="userPwd">
-          <el-input
-            style="width: 38%"
-            v-model="User.userPwd"
-            :disabled="isUpdateInformation"
-          />
-        </el-form-item>
-        <el-form-item label="邮箱" prop="userEmail">
-          <el-input
-            style="width: 38%"
-            v-model="User.userEmail"
-            :disabled="isUpdateInformation"
-          />
-        </el-form-item>
-        <el-form-item label="性别">
-          <el-select
-            :disabled="isUpdateInformation"
-            style="width: 16%"
-            v-model="User.userSex"
-            clearable
-            placeholder="请选择性别"
-          >
-            <el-option :value="1" label="男" />
-            <el-option :value="0" label="女" />
-          </el-select>
-        </el-form-item>
 
-        <!-- 头像 -->
-        <el-form-item label="头像">
-          <!-- 头衔缩略图 -->
-          <pan-thumb :image="User.userAvatar + ''" />
-          <!-- 文件上传按钮 -->
-          <el-button
-            v-if="isUpdateInformation == false"
-            type="primary"
-            icon="el-icon-upload"
-            @click="imagecropperShow = true"
-            >更换头像
-          </el-button>
-
-          <!--
-      v-show：是否显示上传组件
-      :key：类似于id，如果一个页面多个图片上传控件，可以做区分
-      :url：后台上传的url地址
-      @close：关闭上传组件
-      @crop-upload-success：上传成功后的回调 
-        <input type="file" name="file"/>
-      -->
-          <image-cropper
-            v-show="imagecropperShow"
-            :width="300"
-            :height="300"
-            :key="imagecropperKey"
-            :url="BASE_API + '/oss/fileoss'"
-            field="file"
-            @close="close"
-            @crop-upload-success="cropSuccess"
-          />
-        </el-form-item>
-
+    <div id="data_list">
+      <!--查询-->
+      <el-form :inline="true" class="demo-form-inline">
         <el-form-item>
-          <el-button
-            :disabled="saveBtnDisabled"
-            v-if="isUpdateInformation == true"
-            type="primary"
-            @click="toUpdate"
-            >修改个人信息</el-button
-          >
-          <el-button
-            :disabled="saveBtnDisabled"
-            v-if="isUpdateInformation == false"
-            type="warning"
-            @click="channelUpdate"
-            >取消</el-button
-          >
-          <el-button
-            :disabled="saveBtnDisabled"
-            v-if="isUpdateInformation == false"
-            type="warning"
-            @click="startUpdate"
-            >保存</el-button
-          >
+          <el-input v-model="fuzzyquery" placeholder="活动号或者名称" />
         </el-form-item>
+
+        <el-button type="primary" icon="el-icon-search" @click="getlist()"
+          >查询</el-button
+        >
+        <el-button type="default" @click="resetData()">清空</el-button>
       </el-form>
+      <!--数据展示-->
+      <el-table
+        :data="list"
+        v-loading="loading"
+        style="width: 100%; height: 469.6px; border-radius: 8px"
+      >
+        <el-table-column label="序号" width="80" align="center">
+          <template slot-scope="scope">
+            {{ (page - 1) * limit + scope.$index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="活动号" prop="orAcid">
+        </el-table-column>
+        <el-table-column align="center" label="活动名称" prop="actName">
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button
+              style="margin: 0px 4px"
+              size="mini"
+              type="danger"
+              @click="cancelActivity(scope.row.id)"
+              >取消报名</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!--分页-->
+      <el-footer class="footerPage">
+        <el-pagination
+          background
+          align="center"
+          style="padding: 30px 0; text-align: center"
+          layout="total, prev, pager, next, jumper"
+          @current-change="getlist"
+          :total="total"
+          :current-page="page"
+          :page-size="limit"
+        >
+        </el-pagination>
+      </el-footer>
     </div>
   </div>
 </template>
+
 <script>
 import userApi from "../api/user";
-import ImageCropper from "../components/ImageCropper";
-import PanThumb from "../components/PanThumb";
+import orderApi from "../api/userorder";
 export default {
-  name: "About",
+  name: "Home",
   created() {
     if (window.sessionStorage.getItem("userMsg")) {
       this.$store.replaceState(
         JSON.parse(window.sessionStorage.getItem("userMsg"))
       );
     }
+    this.getlist();
     this.yzLogin();
-    this.getMsg();
   },
   watch: {
     isLoginOrNologin() {
@@ -277,9 +236,16 @@ export default {
       }
     },
   },
-  components: { ImageCropper, PanThumb },
   data() {
     return {
+      page: 1, //当前页
+      limit: 8, //每页记录数
+      list: null,
+      total: 0,
+      fuzzyquery: "",
+      loading: true,
+      loading_login: false,
+
       titlemesg: '青年志愿者是"奉献、友爱、互助、进步"的精神。',
       ruleFormlogin: {
         userLoginId: "",
@@ -294,17 +260,9 @@ export default {
         userPwd: "",
       },
       userPwd: "",
-      User: {},
       centerforlogin: false,
       centerforregister: false,
       isLoginOrNologin: true,
-      loading_login: false,
-      // 负责头像以及是否更新部分
-      saveBtnDisabled: false,
-      isUpdateInformation: true,
-      imagecropperShow: false,
-      imagecropperKey: 0,
-      BASE_API: "http://127.0.0.1:10010",
     };
   },
   methods: {
@@ -322,6 +280,38 @@ export default {
       this.ruleFormregister.registersex = "1";
       this.userPwd = "";
     },
+    getlist(page = 1) {
+      this.page = page;
+      orderApi
+        .getUserOrdersListPage(this.page, this.limit, this.fuzzyquery)
+        .then((response) => {
+          this.list = response.data.orderdata;
+          this.total = response.data.total;
+          this.loading = false;
+        })
+        .catch((error) => {});
+    },
+    cancelActivity(id) {
+      this.$confirm("此操作将取消报名该活动, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          orderApi.cancelActivity(id).then((response) => {
+            this.$message({
+              type: "success",
+              message: "取消报名成功!",
+            });
+            this.getlist();
+          });
+        })
+        .catch((error) => {});
+    },
+    resetData() {
+      this.fuzzyquery = "";
+      this.getlist();
+    },
     yzLogin() {
       let valid = this.$store.state.avatar;
       if (valid != "") {
@@ -331,53 +321,12 @@ export default {
     async loginout() {
       this.isLoginOrNologin = true;
       await this.$store.dispatch("logout");
-      this.$router.push({ path: "/" });
+      this.$router.push({ path: "/activity" });
       window.sessionStorage.removeItem("userMsg");
-    },
-    getMsg() {
-      userApi
-        .getInfoMsg()
-        .then((response) => {
-          this.User = response.data;
-          console.log(this.User);
-        })
-        .catch((error) => {});
-    },
-    toUpdate() {
-      this.isUpdateInformation = false;
-    },
-    // 更新个人信息
-    startUpdate() {
-      userApi
-        .updateUser(this.User)
-        .then((response) => {
-          this.$message({
-            type: "success",
-            message: "修改成功!",
-          });
-          this.$router.go({ path: "/about" });
-        })
-        .catch((error) => {});
-    },
-    cropSuccess(data) {
-      this.imagecropperShow = false;
-      //上传之后接口返回图片地址
-      this.User.userAvatar = data;
-      this.imagecropperKey = this.imagecropperKey + 1;
-    },
-    close() {
-      this.imagecropperShow = false;
-      //上传组件初始化
-      this.imagecropperKey = this.imagecropperKey + 1;
-    },
-    channelUpdate() {
-      //this.$refs["sysUser"].resetFields();
-      this.isUpdateInformation = true;
-      //this.getInfoMsg();
     },
   },
 };
 </script>
 <style scoped>
-@import "../assets/css/about.css";
+@import "../assets/css/userorder.css";
 </style>

@@ -76,7 +76,7 @@
             <el-button
               style="width: 39%"
               type="primary"
-              :loading="loading_login"
+              :loading="loading"
               @click="submitFormlogin()"
               >登录</el-button
             >
@@ -85,9 +85,48 @@
             >
           </el-form-item>
           <el-form-item>
-            <div class="divgetPwd">
-              <router-link to="/about">忘记密码</router-link>
-            </div>
+            <div class="divgetPwd" @click="toFindP">忘记密码</div>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+      <el-dialog title="密码找回" :visible.sync="toFindPwd" width="30%" center>
+        <el-form label-width="100px" class="demo-ruleForm">
+          <el-form-item label="账号">
+            <el-input
+              ref="userLoginId"
+              v-model="findPwd.id"
+              placeholder="请输入账号"
+              @blur="onBsp($event)"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱">
+            <el-input
+              v-if="theSuggestion"
+              ref="userLoginPwd"
+              v-model="findPwd.email"
+              placeholder="此账号绑定的邮箱"
+            ></el-input>
+            <el-input
+              v-else
+              ref="userLoginPwd"
+              v-model="findPwd.email"
+              :placeholder="`此ID：` + findPwd.id + `\u3000绑定的邮箱`"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              style="width: 39%"
+              type="primary"
+              :loading="loading"
+              @click="submitFindPwd()"
+              >找回</el-button
+            >
+            <el-button style="width: 39%" @click="resetFindPwd()"
+              >重置</el-button
+            >
+          </el-form-item>
+          <el-form-item>
+            <div class="divgetPwd" @click="toLogin">返回登录</div>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -100,58 +139,55 @@
         center
       >
         <el-form
-          :model="ruleFormregister"
           ref="ruleFormregister"
           label-width="100px"
           class="demo-ruleForm"
         >
           <el-form-item label="账号" prop="registerid">
             <el-input
-              v-model="ruleFormregister.registerid"
+              v-model="ruleFormregister.userId"
               placeholder="请输入手机号"
             ></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="registerpwdf">
             <el-input
-              v-model="ruleFormregister.registerpwdf"
+              v-model="ruleFormregister.userPwd"
               placeholder="请输入6-18位密码"
               show-password
             ></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="registerpwds">
             <el-input
-              v-model="ruleFormregister.registerpwds"
+              v-model="userPwd"
               placeholder="请 再 次输入密码"
               show-password
             ></el-input>
           </el-form-item>
           <el-form-item label="名字" prop="registername">
             <el-input
-              v-model="ruleFormregister.registername"
+              v-model="ruleFormregister.userName"
               placeholder="请输入名字"
             ></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="registeremail">
             <el-input
-              v-model="ruleFormregister.registeremail"
+              v-model="ruleFormregister.userEmail"
               placeholder="请输入邮箱账号"
             ></el-input>
           </el-form-item>
           <el-form-item label="性别" prop="registersex">
-            <el-radio v-model="sex" label="1">男</el-radio>
-            <el-radio v-model="sex" label="2">女</el-radio>
+            <el-radio v-model="ruleFormregister.userSex" label="1">男</el-radio>
+            <el-radio v-model="ruleFormregister.userSex" label="0">女</el-radio>
             <el-tag type="info">注：登陆后可更换头像</el-tag>
           </el-form-item>
           <el-form-item>
             <el-button
               style="width: 39%"
               type="primary"
-              @click="submitFormregister('ruleFormregister')"
+              @click="submitFormregister()"
               >注册</el-button
             >
-            <el-button
-              style="width: 39%"
-              @click="resetFormregister('ruleFormregister')"
+            <el-button style="width: 39%" @click="resetFormregister()"
               >重置</el-button
             >
           </el-form-item>
@@ -231,19 +267,21 @@
 </template>
 
 <script>
-// import activity from "../api/activity";
+import userApi from "../api/user";
 export default {
   name: "Navigation",
   created() {
-    if (window.localStorage.getItem("userMsg")) {
-      this.$store.replaceState(JSON.parse(window.localStorage.getItem("userMsg")));
+    if (window.sessionStorage.getItem("userMsg")) {
+      this.$store.replaceState(
+        JSON.parse(window.sessionStorage.getItem("userMsg"))
+      );
     }
     this.yzLogin();
   },
   data() {
     return {
       wd: "",
-      loading: true,
+      loading: false,
       titlemesg: '青年志愿者是"奉献、友爱、互助、进步"的精神。',
       sex: "1",
       ruleFormlogin: {
@@ -251,21 +289,28 @@ export default {
         userLoginPwd: "",
       },
       ruleFormregister: {
-        registerid: "",
-        registerpwdf: "",
-        registerpwds: "",
-        registername: "",
-        registeremail: "",
+        id: "",
+        userName: "",
+        userId: "",
+        userSex: "1",
+        userEmail: "",
+        userPwd: "",
       },
+      userPwd: "",
       centerforlogin: false,
       centerforregister: false,
       isLoginOrNologin: true,
-      loading_login: false,
+      findPwd: {
+        id: "",
+        email: "",
+      },
+      toFindPwd: false,
+      theSuggestion: true,
     };
   },
   methods: {
     submitFormlogin() {
-      this.loading_login = true;
+      this.loading = true;
       this.$store
         .dispatch("login", this.ruleFormlogin)
         .then(() => {
@@ -277,23 +322,39 @@ export default {
                 message: "登录成功！",
                 type: "success",
               });
-              this.loading_login = false;
             })
             .catch((error) => {
-              this.loading_login = false;
             });
           this.$router.push({ path: "/navigation" });
           this.centerforlogin = false;
+          this.loading = false;
         })
         .catch((error) => {
-          this.loading = false;
+          
         });
     },
     resetFormlogin() {
-      this.ruleFormlogin.resetFields();
+      this.ruleFormlogin = {};
     },
-    submitFormregister(data) {},
-    resetFormregister() {},
+    submitFormregister() {
+      userApi
+        .add(this.ruleFormregister)
+        .then((response) => {
+          this.$message({
+            type: "success",
+            message: "注册成功!",
+          });
+          this.resetFormregister();
+          this.centerforregister = false;
+          this.$router.push({ path: "/navigation" });
+        })
+        .catch((error) => {});
+    },
+    resetFormregister() {
+      this.ruleFormregister = {};
+      this.ruleFormregister.registersex = "1";
+      this.userPwd = "";
+    },
     onSubmit() {
       window.open("https://www.baidu.com/s?wd=" + this.wd);
     },
@@ -306,8 +367,49 @@ export default {
     async loginout() {
       this.isLoginOrNologin = true;
       await this.$store.dispatch("logout");
-      this.$router.push(`/navigation?redirect=${this.$route.fullPath}`);
-      window.localStorage.removeItem("userMsg");
+      this.$router.push({ path:'/navigation' });
+      window.sessionStorage.removeItem("userMsg");
+    },
+    toFindP() {
+      this.centerforlogin = false;
+      setTimeout(() => {
+        this.toFindPwd = true;
+        this.resetFormlogin();
+      }, 500);
+    },
+    toLogin() {
+      this.toFindPwd = false;
+      setTimeout(() => {
+        this.centerforlogin = true;
+        this.resetFindPwd();
+      }, 500);
+    },
+    resetFindPwd() {
+      this.findPwd = {};
+      this.theSuggestion = true;
+    },
+    submitFindPwd() {
+      userApi
+        .FindPwd(this.findPwd)
+        .then((response) => {
+          const h = this.$createElement;
+          this.$notify({
+            title: "密码找回消息提示",
+            position: "top-right",
+            message: h(
+              "i",
+              { style: "color: #4169e1;font-weight:bold" },
+              "您原来的密码已发送到您账号绑定的邮箱，邮箱号：" +
+                this.findPwd.email
+            ),
+          });
+          this.resetFindPwd();
+          this.toFindPwd = false;
+        })
+        .catch((error) => {});
+    },
+    onBsp(event) {
+      this.theSuggestion = false;
     },
   },
 };

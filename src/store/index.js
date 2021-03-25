@@ -10,7 +10,6 @@ export default new Vuex.Store({
     token: getToken(),
     name: '',
     avatar: '',
-    roles: [],
   },
   mutations: {
     SET_TOKEN: (state, token) => {
@@ -22,14 +21,10 @@ export default new Vuex.Store({
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar;
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles;
-    },
     RESET_STATE:(state) =>{
       state.token = '',
       state.avatar = '',
-      state.name = '',
-      state.roles = []
+      state.name = ''
     }
   },
   actions: {
@@ -61,13 +56,7 @@ export default new Vuex.Store({
             if (!data) {
               reject('Verification failed, please Login again.');
             }
-            const { roles, name, avatar } = data;
-            // roles must be a non-empty array
-            if (!roles || roles.length <= 0) {
-              reject('getInfo: roles must be a non-null array!');
-            }
-
-            commit('SET_ROLES', roles);
+            const { name, avatar } = data;
             commit('SET_NAME', name);
             commit('SET_AVATAR', avatar);
             resolve(data);
