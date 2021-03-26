@@ -55,16 +55,17 @@
         :visible.sync="centerforlogin"
         width="30%"
         center
+        :ref="ruleFormlogin"
+        v-model="ruleFormlogin"
       >
         <el-form label-width="100px" class="demo-ruleForm">
-          <el-form-item label="账号">
+          <el-form-item label="账号" prop="userLoginId">
             <el-input
-              ref="userLoginId"
               v-model="ruleFormlogin.userLoginId"
               placeholder="请输入手机号"
             ></el-input>
           </el-form-item>
-          <el-form-item label="密码">
+          <el-form-item label="密码" prop="userLoginPwd">
             <el-input
               ref="userLoginPwd"
               v-model="ruleFormlogin.userLoginPwd"
