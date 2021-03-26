@@ -49,7 +49,6 @@
       青年志愿者 <i class="iconfont iconshuxian"></i>Chinese Youth Volunteers
     </h1>
     <div class="set_background"></div>
-
     <div class="set_login">
       <el-dialog
         title="账号登录"
