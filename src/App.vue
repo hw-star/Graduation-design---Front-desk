@@ -10,26 +10,21 @@ export default {
   mounted() {
     bestwishes();
   },
-  created() {
-    window.addEventListener("beforeunload", () => {
-      sessionStorage.setItem("userMsg", JSON.stringify(this.$store.state));
-    });
-    // this.$store.commit("RESET_STATE");
-  },
-  destroyed() {
-    window.removeEventListener("beforeunload", () => {
-      sessionStorage.removeItem("userMsg");
-    });
-  },
-  watch: {
-    $route() {
-      if (this.$route.state) {
-        window.sessionStorage.setItem(
-          "userMsg",
-          JSON.stringify(this.$store.state)
-        );
-      }
-    },
-  },
+  // created() {
+  //   if (store.state.avatar) {
+  //     window.addEventListener("beforeunload", () => {
+  //       sessionStorage.setItem("userMsg", JSON.stringify(this.$store.state));
+  //     });
+  //   }
+  //   // this.$store.commit("RESET_STATE");
+  // },
+  // watch: {
+  //   $route() {
+  //     if (store.state.avatar) {
+  //       window.sessionStorage.setItem("userMsg", JSON.stringify(store.state));
+  //       console.log(store.state.name);
+  //     }
+  //   },
+  // },
 };
 </script>

@@ -259,6 +259,7 @@ export default {
                 message: "登录成功！",
                 type: "success",
               });
+              this.saveData();
             })
             .catch((error) => {});
           this.$router.push({ path: "/" });
@@ -344,6 +345,11 @@ export default {
     onBsp(event) {
       this.theSuggestion = false;
     },
+    saveData(){
+      window.addEventListener("beforeunload", () => {
+        sessionStorage.setItem("userMsg", JSON.stringify(this.$store.state));
+      });
+    }
   },
 };
 </script>

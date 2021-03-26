@@ -312,7 +312,7 @@ export default {
       this.centerforlogin = false;
     },
     resetFormlogin() {
-      this.ruleFormlogin.resetFields();
+      this.ruleFormlogin = {};
     },
     submitFormregister() {
       this.centerforregister = false;
