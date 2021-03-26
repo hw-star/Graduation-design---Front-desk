@@ -154,7 +154,7 @@
       </el-dialog>
     </div>
     <div class="aboutMsg">
-      <el-form label-width="80px" ref="User" :model="User">
+      <el-form label-width="80px" ref="User" :model="User" :rules="UserRules">
         <el-form-item label="名字" prop="userName">
           <el-input
             style="width: 38%"
@@ -162,7 +162,7 @@
             :disabled="isUpdateInformation"
           />
         </el-form-item>
-        <el-form-item label="账号">
+        <el-form-item label="账号" prop="userId">
           <el-input style="width: 38%" v-model="User.userId" :disabled="true" />
         </el-form-item>
         <el-form-item label="密码" prop="userPwd">
@@ -256,6 +256,7 @@
 import userApi from "../api/user";
 import ImageCropper from "../components/ImageCropper";
 import PanThumb from "../components/PanThumb";
+import { validId, validEmail, validName } from "../utils/validate";
 export default {
   name: "About",
   created() {
@@ -267,18 +268,41 @@ export default {
     this.yzLogin();
     this.getMsg();
   },
-  watch: {
-    isLoginOrNologin() {
-      if (window.sessionStorage.getItem("applyId")) {
-        setTimeout(() => {
-          this.signUpActivity(window.sessionStorage.getItem("applyId"));
-          window.sessionStorage.removeItem("applyId");
-        }, 500);
-      }
-    },
-  },
   components: { ImageCropper, PanThumb },
   data() {
+    const validateUserId = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("账号不能为空"));
+      } else {
+        if (!validId(value)) {
+          callback(new Error("手机号格式不正确"));
+        } else {
+          callback();
+        }
+      }
+    };
+    const validateEmail = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("邮箱不能为空"));
+      } else {
+        if (validEmail(value)) {
+          callback();
+        } else {
+          return callback(new Error("邮箱格式不正确"));
+        }
+      }
+    };
+    const validateName = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("名字不能为空"));
+      } else {
+        if (validName(value)) {
+          callback();
+        } else {
+          return callback(new Error("名字必须是汉字"));
+        }
+      }
+    };
     return {
       titlemesg: '青年志愿者是"奉献、友爱、互助、进步"的精神。',
       ruleFormlogin: {
@@ -305,6 +329,28 @@ export default {
       imagecropperShow: false,
       imagecropperKey: 0,
       BASE_API: "http://127.0.0.1:10010",
+
+      UserRules: {
+        userId: [
+          { required: true, trigger: "blur", validator: validateUserId },
+        ],
+        userPwd: [
+          {
+            required: true,
+            type: "string",
+            trigger: "blur",
+            max: 18,
+            min: 6,
+            message: "密码位数不够",
+          },
+        ],
+        userEmail: [
+          { required: true, trigger: "blur", validator: validateEmail },
+        ],
+        userName: [
+          { required: true, trigger: "blur", validator: validateName },
+        ],
+      },
     };
   },
   methods: {
@@ -339,7 +385,6 @@ export default {
         .getInfoMsg()
         .then((response) => {
           this.User = response.data;
-          console.log(this.User);
         })
         .catch((error) => {});
     },
@@ -348,16 +393,22 @@ export default {
     },
     // 更新个人信息
     startUpdate() {
-      userApi
-        .updateUser(this.User)
-        .then((response) => {
-          this.$message({
-            type: "success",
-            message: "修改成功!",
-          });
-          this.$router.go({ path: "/about" });
-        })
-        .catch((error) => {});
+      this.$refs.User.validate((valid) => {
+        if (valid) {
+          userApi
+            .updateUser(this.User)
+            .then((response) => {
+              this.$message({
+                type: "success",
+                message: "修改成功!",
+              });
+              this.$router.go({ path: "/about" });
+            })
+            .catch((error) => {});
+        } else {
+          return false;
+        }
+      });
     },
     cropSuccess(data) {
       this.imagecropperShow = false;
@@ -371,9 +422,9 @@ export default {
       this.imagecropperKey = this.imagecropperKey + 1;
     },
     channelUpdate() {
-      //this.$refs["sysUser"].resetFields();
+      this.$refs["User"].resetFields();
       this.isUpdateInformation = true;
-      //this.getInfoMsg();
+      this.getMsg();
     },
   },
 };

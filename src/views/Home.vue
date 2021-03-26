@@ -55,12 +55,17 @@
         :visible.sync="centerforlogin"
         width="30%"
         center
-        :ref="ruleFormlogin"
-        v-model="ruleFormlogin"
       >
-        <el-form label-width="100px" class="demo-ruleForm">
+        <el-form
+          label-width="100px"
+          class="demo-ruleForm"
+          ref="ruleFormlogin"
+          :model="ruleFormlogin"
+          :rules="ruleFormloginRules"
+        >
           <el-form-item label="账号" prop="userLoginId">
             <el-input
+              ref="userLoginId"
               v-model="ruleFormlogin.userLoginId"
               placeholder="请输入手机号"
             ></el-input>
@@ -91,8 +96,14 @@
         </el-form>
       </el-dialog>
       <el-dialog title="密码找回" :visible.sync="toFindPwd" width="30%" center>
-        <el-form label-width="100px" class="demo-ruleForm">
-          <el-form-item label="账号">
+        <el-form
+          label-width="100px"
+          class="demo-ruleForm"
+          ref="findPwd"
+          :model="findPwd"
+          :rules="findPwdRules"
+        >
+          <el-form-item label="账号" prop="id">
             <el-input
               ref="userLoginId"
               v-model="findPwd.id"
@@ -100,7 +111,7 @@
               @blur="onBsp($event)"
             ></el-input>
           </el-form-item>
-          <el-form-item label="邮箱">
+          <el-form-item label="邮箱" prop="email">
             <el-input
               v-if="theSuggestion"
               ref="userLoginPwd"
@@ -132,7 +143,6 @@
         </el-form>
       </el-dialog>
     </div>
-
     <div class="set_register">
       <el-dialog
         title="账号注册"
@@ -144,40 +154,42 @@
           ref="ruleFormregister"
           label-width="100px"
           class="demo-ruleForm"
+          :model="ruleFormregister"
+          :rules="ruleFormregisterRules"
         >
-          <el-form-item label="账号" prop="registerid">
+          <el-form-item label="账号" prop="userId">
             <el-input
               v-model="ruleFormregister.userId"
               placeholder="请输入手机号"
             ></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="registerpwdf">
+          <el-form-item label="密码" prop="userPwd">
             <el-input
               v-model="ruleFormregister.userPwd"
               placeholder="请输入6-18位密码"
               show-password
             ></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="registerpwds">
+          <el-form-item label="密码" prop="userPwdtwo">
             <el-input
-              v-model="userPwd"
+              v-model="ruleFormregister.userPwdtwo"
               placeholder="请 再 次输入密码"
               show-password
             ></el-input>
           </el-form-item>
-          <el-form-item label="名字" prop="registername">
+          <el-form-item label="名字" prop="userName">
             <el-input
               v-model="ruleFormregister.userName"
               placeholder="请输入名字"
             ></el-input>
           </el-form-item>
-          <el-form-item label="邮箱" prop="registeremail">
+          <el-form-item label="邮箱" prop="userEmail">
             <el-input
               v-model="ruleFormregister.userEmail"
               placeholder="请输入邮箱账号"
             ></el-input>
           </el-form-item>
-          <el-form-item label="性别" prop="registersex">
+          <el-form-item label="性别">
             <el-radio v-model="ruleFormregister.userSex" label="1">男</el-radio>
             <el-radio v-model="ruleFormregister.userSex" label="0">女</el-radio>
             <el-tag type="info">注：登陆后可更换头像</el-tag>
@@ -202,6 +214,7 @@
 <script>
 import { createcanvasline } from "../assets/js/createcanvasline";
 import userApi from "../api/user";
+import { validId, validEmail, validName } from "../utils/validate";
 export default {
   name: "Home",
   created() {
@@ -216,9 +229,52 @@ export default {
     createcanvasline();
   },
   data() {
+    const validateUserId = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("账号不能为空"));
+      } else {
+        if (!validId(value)) {
+          callback(new Error("手机号格式不正确"));
+        } else {
+          callback();
+        }
+      }
+    };
+    const validateEmail = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("邮箱不能为空"));
+      } else {
+        if (validEmail(value)) {
+          callback();
+        } else {
+          return callback(new Error("邮箱格式不正确"));
+        }
+      }
+    };
+    const validateName = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("名字不能为空"));
+      } else {
+        if (validName(value)) {
+          callback();
+        } else {
+          return callback(new Error("名字必须是汉字"));
+        }
+      }
+    };
+    const validateYZPwd = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("不能为空"));
+      } else {
+        if (this.ruleFormregister.userPwd == value) {
+          callback();
+        } else {
+          return callback(new Error("两次输入的密码不一致"));
+        }
+      }
+    };
     return {
       titlemesg: '青年志愿者是"奉献、友爱、互助、进步"的精神。',
-      sex: "1",
       ruleFormlogin: {
         userLoginId: "",
         userLoginPwd: "",
@@ -230,12 +286,12 @@ export default {
         userSex: "1",
         userEmail: "",
         userPwd: "",
+        userPwdtwo: "",
       },
       findPwd: {
         id: "",
         email: "",
       },
-      userPwd: "",
       centerforlogin: false,
       centerforregister: false,
       loading: false,
@@ -243,54 +299,141 @@ export default {
 
       toFindPwd: false,
       theSuggestion: true,
+      ruleFormloginRules: {
+        userLoginId: [
+          { required: true, trigger: "blur", validator: validateUserId },
+        ],
+        userLoginPwd: [
+          {
+            required: true,
+            type: "string",
+            trigger: "blur",
+            max: 18,
+            min: 6,
+            message: "密码位数不够",
+          },
+        ],
+      },
+      findPwdRules: {
+        id: [{ required: true, trigger: "blur", validator: validateUserId }],
+        email: [{ required: true, trigger: "blur", validator: validateEmail }],
+      },
+      ruleFormregisterRules: {
+        userId: [
+          { required: true, trigger: "blur", validator: validateUserId },
+        ],
+        userPwd: [
+          {
+            required: true,
+            type: "string",
+            trigger: "blur",
+            max: 18,
+            min: 6,
+            message: "密码位数不够",
+          },
+        ],
+        userEmail: [
+          { required: true, trigger: "blur", validator: validateEmail },
+        ],
+        userPwdtwo: [
+          {
+            required: true,
+            type: "string",
+            trigger: "blur",
+            max: 18,
+            min: 6,
+            message: "密码位数不够",
+          },
+          {
+            required: true,
+            type: "string",
+            trigger: "blur",
+            validator: validateYZPwd,
+          },
+        ],
+        userName: [
+          { required: true, trigger: "blur", validator: validateName },
+        ],
+      },
     };
+  },
+  watch: {
+    centerforlogin() {
+      if (this.centerforlogin == true) {
+        this.$nextTick(() => {
+          this.$refs["ruleFormlogin"].resetFields();
+          this.$refs["findPwd"].resetFields();
+        });
+      }
+    },
+    centerforregister() {
+      if (this.centerforregister == true) {
+        this.$nextTick(() => {
+          this.$refs["ruleFormregister"].resetFields();
+          this.ruleFormregister.userSex = "1";
+        });
+      }
+    },
   },
   methods: {
     submitFormlogin() {
-      this.loading = true;
-      this.$store
-        .dispatch("login", this.ruleFormlogin)
-        .then(() => {
+      this.$refs.ruleFormlogin.validate((valid) => {
+        if (valid) {
+          this.loading = true;
           this.$store
-            .dispatch("getInfo", this.$store.state.token)
+            .dispatch("login", this.ruleFormlogin)
             .then(() => {
-              this.isLoginOrNologin = false;
-              this.$message({
-                message: "登录成功！",
-                type: "success",
-              });
-              this.saveData();
+              this.$store
+                .dispatch("getInfo", this.$store.state.token)
+                .then(() => {
+                  this.isLoginOrNologin = false;
+                  this.$message({
+                    message: "登录成功！",
+                    type: "success",
+                  });
+                  this.saveData();
+                })
+                .catch((error) => {});
+              this.$router.push({ path: "/" });
+              this.centerforlogin = false;
+              this.loading = false;
             })
-            .catch((error) => {});
-          this.$router.push({ path: "/" });
-          this.centerforlogin = false;
-          this.loading = false;
-        })
-        .catch((error) => {
-          this.loading = false;
-        });
+            .catch((error) => {
+              this.loading = false;
+            });
+        } else {
+          return false;
+        }
+      });
     },
     resetFormlogin() {
-      this.ruleFormlogin = {};
+      // this.ruleFormlogin = {};
+      this.$refs["ruleFormlogin"].resetFields();
     },
     submitFormregister() {
-      userApi
-        .add(this.ruleFormregister)
-        .then((response) => {
-          this.$message({
-            type: "success",
-            message: "注册成功!",
-          });
-          this.resetFormregister();
-          this.centerforregister = false;
-          this.$router.push({ path: "/" });
-        })
-        .catch((error) => {});
+      this.$refs.ruleFormregister.validate((valid) => {
+        if (valid) {
+          userApi
+            .add(this.ruleFormregister)
+            .then((response) => {
+              this.$message({
+                type: "success",
+                message: "注册成功!",
+              });
+              this.resetFormregister();
+              this.centerforregister = false;
+              this.$router.push({ path: "/" });
+            })
+            .catch((error) => {});
+        } else {
+          return false;
+        }
+      });
     },
     resetFormregister() {
-      this.ruleFormregister = {};
-      this.ruleFormregister.registersex = "1";
-      this.userPwd = "";
+      // this.ruleFormregister = {};
+      this.$refs["ruleFormregister"].resetFields();
+      this.ruleFormregister.userSex = "1";
     },
     yzLogin() {
       let valid = this.$store.state.avatar;
@@ -319,37 +462,44 @@ export default {
       }, 500);
     },
     resetFindPwd() {
-      this.findPwd = {};
+      // this.findPwd = {};
+      this.$refs["findPwd"].resetFields();
       this.theSuggestion = true;
     },
     submitFindPwd() {
-      userApi
-        .FindPwd(this.findPwd)
-        .then((response) => {
-          const h = this.$createElement;
-          this.$notify({
-            title: "密码找回消息提示",
-            position: "top-right",
-            message: h(
-              "i",
-              { style: "color: #4169e1;font-weight:bold" },
-              "您原来的密码已发送到您账号绑定的邮箱，邮箱号：" +
-                this.findPwd.email
-            ),
-          });
-          this.resetFindPwd();
-          this.toFindPwd = false;
-        })
-        .catch((error) => {});
+      this.$refs.findPwd.validate((valid) => {
+        if (valid) {
+          userApi
+            .FindPwd(this.findPwd)
+            .then((response) => {
+              const h = this.$createElement;
+              this.$notify({
+                title: "密码找回消息提示",
+                position: "top-right",
+                message: h(
+                  "i",
+                  { style: "color: #4169e1;font-weight:bold" },
+                  "您原来的密码已发送到您账号绑定的邮箱，邮箱号：" +
+                    this.findPwd.email
+                ),
+              });
+              this.resetFindPwd();
+              this.toFindPwd = false;
+            })
+            .catch((error) => {});
+        } else {
+          return false;
+        }
+      });
     },
     onBsp(event) {
       this.theSuggestion = false;
     },
-    saveData(){
+    saveData() {
       window.addEventListener("beforeunload", () => {
         sessionStorage.setItem("userMsg", JSON.stringify(this.$store.state));
       });
-    }
+    },
   },
 };
 </script>
