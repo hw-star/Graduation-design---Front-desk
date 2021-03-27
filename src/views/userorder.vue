@@ -225,16 +225,6 @@ export default {
     this.getlist();
     this.yzLogin();
   },
-  watch: {
-    isLoginOrNologin() {
-      if (window.sessionStorage.getItem("applyId")) {
-        setTimeout(() => {
-          this.signUpActivity(window.sessionStorage.getItem("applyId"));
-          window.sessionStorage.removeItem("applyId");
-        }, 500);
-      }
-    },
-  },
   data() {
     return {
       page: 1, //当前页

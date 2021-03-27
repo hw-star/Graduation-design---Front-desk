@@ -361,15 +361,17 @@ export default {
     centerforlogin() {
       if (this.centerforlogin == true) {
         this.$nextTick(() => {
-          this.$refs["ruleFormlogin"].resetFields();
-          this.$refs["findPwd"].resetFields();
+            this.$refs.ruleFormlogin.resetFields();
+          if (this.$refs['findPwd'] !== undefined) {
+            this.$refs.findPwd.resetFields();
+          }
         });
       }
     },
     centerforregister() {
       if (this.centerforregister == true) {
         this.$nextTick(() => {
-          this.$refs["ruleFormregister"].resetFields();
+          this.$refs.ruleFormregister.resetFields();
           this.ruleFormregister.userSex = "1";
         });
       }
@@ -408,7 +410,7 @@ export default {
     },
     resetFormlogin() {
       // this.ruleFormlogin = {};
-      this.$refs["ruleFormlogin"].resetFields();
+      this.$refs.ruleFormlogin.resetFields();
     },
     submitFormregister() {
       this.$refs.ruleFormregister.validate((valid) => {
@@ -432,7 +434,7 @@ export default {
     },
     resetFormregister() {
       // this.ruleFormregister = {};
-      this.$refs["ruleFormregister"].resetFields();
+      this.$refs.ruleFormregister.resetFields();
       this.ruleFormregister.userSex = "1";
     },
     yzLogin() {
@@ -463,7 +465,7 @@ export default {
     },
     resetFindPwd() {
       // this.findPwd = {};
-      this.$refs["findPwd"].resetFields();
+      this.$refs.findPwd.resetFields();
       this.theSuggestion = true;
     },
     submitFindPwd() {
