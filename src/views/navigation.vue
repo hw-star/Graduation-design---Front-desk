@@ -282,6 +282,7 @@
 
 <script>
 import userApi from "../api/user";
+import { validId, validEmail, validName } from "../utils/validate";
 export default {
   name: "Navigation",
   created() {

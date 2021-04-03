@@ -335,8 +335,8 @@ export default {
     centerforlogin() {
       if (this.centerforlogin == true) {
         this.$nextTick(() => {
-            this.$refs.ruleFormlogin.resetFields();
-          if (this.$refs['findPwd'] !== undefined) {
+          this.$refs.ruleFormlogin.resetFields();
+          if (this.$refs["findPwd"] !== undefined) {
             this.$refs.findPwd.resetFields();
           }
         });
@@ -512,6 +512,12 @@ export default {
                 });
               this.$router.push({ path: "/activity" });
               this.centerforlogin = false;
+              let id = window.sessionStorage.getItem("applyId");
+              if (id != null) {
+                setTimeout(() => {
+                  this.signUpActivity(id);
+                }, 800);
+              }
             })
             .catch((error) => {});
         } else {
@@ -579,6 +585,7 @@ export default {
             });
           })
           .catch((error) => {});
+        window.sessionStorage.removeItem("applyId");
       } else {
         this.centerforlogin = true;
         // window.sessionStorage.setItem("yzlogin", "true");
