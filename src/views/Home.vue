@@ -355,6 +355,8 @@ export default {
           { required: true, trigger: "blur", validator: validateName },
         ],
       },
+      selectnum:0,
+      hw: false
     };
   },
   watch: {
