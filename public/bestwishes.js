@@ -11,6 +11,6 @@ function bestwishes() {
   };
   let l = new String(strings);
   l = l.substring(l.indexOf('/*') + 3, l.lastIndexOf('*/'));
-  console.log('%c'+l+'\n\n\n\t%c毕业快乐啊\n','font-weight:bold;color:#409EFF','font-weight:bold;font-size:1.6em;color:#7B68EE');
+  console.log('%c'+l+'\n\n\n\tNUC\t%c毕业快乐\n','font-weight:bold;color:#409EFF','font-weight:bold;font-size:1.6em;color:#7B68EE');
 }
 bestwishes();

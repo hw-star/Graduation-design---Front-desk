@@ -13,7 +13,14 @@ Vue.use( VueAxios , axios)
 Vue.use(ElementUI);
 
 Vue.config.productionTip = false
-
+Vue.prototype.$keyBoard = function (vm, methodName, code) {
+  document.onkeydown = function () {
+    let key = window.event.keyCode;
+    if (key == code) {
+      vm[methodName](code); // 触发methodName事件
+    }
+  };
+}
 new Vue({
   router,
   store,

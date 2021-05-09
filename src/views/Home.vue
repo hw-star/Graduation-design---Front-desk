@@ -361,8 +361,8 @@ export default {
     centerforlogin() {
       if (this.centerforlogin == true) {
         this.$nextTick(() => {
-            this.$refs.ruleFormlogin.resetFields();
-          if (this.$refs['findPwd'] !== undefined) {
+          this.$refs.ruleFormlogin.resetFields();
+          if (this.$refs["findPwd"] !== undefined) {
             this.$refs.findPwd.resetFields();
           }
         });
