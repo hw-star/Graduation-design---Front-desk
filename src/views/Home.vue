@@ -45,10 +45,14 @@
       </div>
     </nav>
     <canvas id="line">浏览器版本太低，请升级浏览器！</canvas>
-    <h1>
+    <h1 v-if="!tohw">
       青年志愿者 <i class="iconfont iconshuxian"></i>Chinese Youth Volunteers
     </h1>
+    <div style="margin: 200px" v-if="tohw"></div>
+    <div v-if="tohw" class="stimulate">奉献、友爱、互助、进步</div>
+    <div v-if="tohw" class="everyStar">Each of us is a unique, shining star</div>
     <div class="set_background"></div>
+    <div v-if="tohw" :class="set_background_hw"></div>
     <div class="set_login">
       <el-dialog
         title="账号登录"
@@ -227,6 +231,7 @@ export default {
   },
   mounted() {
     createcanvasline();
+    this.$keyBoardbg(this, "tobackgroundH", "tobackgroundW", 72, 87);
   },
   data() {
     const validateUserId = (rule, value, callback) => {
@@ -355,8 +360,9 @@ export default {
           { required: true, trigger: "blur", validator: validateName },
         ],
       },
-      selectnum:0,
-      hw: false
+      selectnum: 0,
+      tohw: false,
+      set_background_hw: "",
     };
   },
   watch: {
@@ -503,6 +509,22 @@ export default {
       window.addEventListener("beforeunload", () => {
         sessionStorage.setItem("userMsg", JSON.stringify(this.$store.state));
       });
+    },
+    tobackgroundH() {
+      this.selectnum += 1;
+      if (this.selectnum == 3) {
+        this.set_background_hw = "set_background_h";
+        this.tohw = true;
+        this.selectnum = 0;
+      }
+    },
+    tobackgroundW() {
+      this.selectnum += 1;
+      if (this.selectnum == 3) {
+        this.set_background_hw = "set_background_w";
+        this.tohw = true;
+        this.selectnum = 0;
+      }
     },
   },
 };
