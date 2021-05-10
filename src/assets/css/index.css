@@ -66,28 +66,32 @@
   position: absolute;
   top: 300px;
   left: 670px;
-  font-weight: bold;
   font-size: 1.8em;
   color:white;
+  padding: 10px 20px;
 }
 .applogin-container .stimulate:hover{
-  color: red;
   transition: all 1s;
+  background: rgba(255, 0, 0, .8);
+  border-radius: 100px;
+  box-shadow: 0 0 40px 8px red;
   cursor: url("../images/zan.png") 2 2 ,grab;
 }
 .applogin-container .everyStar{
   position: absolute;
   top: 460px;
   left: 320px;
-  font-weight: bold;
   font-size: 3em;
   color: white;
   opacity: 0;
+  padding: 10px 20px;
 }
 .applogin-container .everyStar:hover{
   color: yellow;
   transition: all 4s, color 1s;
   opacity: 1;
+  border-radius: 20px;
+  border: 3px dashed yellow;
   cursor: url("../images/star.png") 2 2 ,grab;
 }
 .applogin-container .nav_set{
@@ -98,7 +102,6 @@
   color: #ffffff;
   padding: 10px 20px;
   margin: 6px 20px;
-  font-weight: bold;
   font-size: 1.2em;
 }
 a:-webkit-any-link{
@@ -115,7 +118,6 @@ a:-webkit-any-link{
   color: #ffffff;
   padding: 9px 20px;
   margin: 8px 27px;
-  font-weight: bold;
   font-size: 1.1em;
   border-bottom: none;
 }
