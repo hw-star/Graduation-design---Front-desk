@@ -50,7 +50,9 @@
     </h1>
     <div style="margin: 200px" v-if="tohw"></div>
     <div v-if="tohw" class="stimulate">奉献、友爱、互助、进步</div>
-    <div v-if="tohw" class="everyStar">Each of us is a unique, shining star</div>
+    <div v-if="tohw" class="everyStar">
+      Each of us is a unique, shining star
+    </div>
     <div class="set_background"></div>
     <div v-if="tohw" :class="set_background_hw"></div>
     <div class="set_login">
@@ -363,6 +365,8 @@ export default {
       selectnum: 0,
       tohw: false,
       set_background_hw: "",
+      toh: false,
+      tow: false,
     };
   },
   watch: {
@@ -513,17 +517,41 @@ export default {
     tobackgroundH() {
       this.selectnum += 1;
       if (this.selectnum == 3) {
-        this.set_background_hw = "set_background_h";
-        this.tohw = true;
-        this.selectnum = 0;
+        if (this.toh) {
+          this.set_background_hw = "set_background_w";
+          if (this.tow) {
+            this.tohw = true;
+          } else {
+            this.tohw = false;
+          }
+          this.toh = false;
+          this.selectnum = 0;
+        } else {
+          this.set_background_hw = "set_background_h";
+          this.tohw = true;
+          this.toh = true;
+          this.selectnum = 0;
+        }
       }
     },
     tobackgroundW() {
       this.selectnum += 1;
       if (this.selectnum == 3) {
-        this.set_background_hw = "set_background_w";
-        this.tohw = true;
-        this.selectnum = 0;
+        if (this.tow) {
+          this.set_background_hw = "set_background_h";
+          if (this.toh) {
+            this.tohw = true;
+          } else {
+            this.tohw = false;
+          }
+          this.tow = false;
+          this.selectnum = 0;
+        } else {
+          this.set_background_hw = "set_background_w";
+          this.tohw = true;
+          this.tow = true;
+          this.selectnum = 0;
+        }
       }
     },
   },

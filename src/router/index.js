@@ -16,6 +16,7 @@ const routes = [
   },
   {
     path: '/404',
+    // @ts-ignore
     component: () => import('../views/404.vue'),
     hidden: true
   },
