@@ -62,12 +62,14 @@
           ref="ruleFormlogin"
           :model="ruleFormlogin"
           :rules="ruleFormloginRules"
+          auto-complete="on"
         >
           <el-form-item label="账号" prop="userLoginId">
             <el-input
               ref="userLoginId"
               v-model="ruleFormlogin.userLoginId"
               placeholder="请输入手机号"
+              auto-complete="on"
             ></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="userLoginPwd">
@@ -76,6 +78,8 @@
               v-model="ruleFormlogin.userLoginPwd"
               placeholder="请输入6-18位密码"
               show-password
+              auto-complete="on"
+              @keyup.enter.native="submitFormlogin"
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -102,6 +106,7 @@
           ref="findPwd"
           :model="findPwd"
           :rules="findPwdRules"
+          auto-complete="on"
         >
           <el-form-item label="账号" prop="id">
             <el-input
@@ -109,6 +114,7 @@
               v-model="findPwd.id"
               placeholder="请输入账号"
               @blur="onBsp($event)"
+              auto-complete="on"
             ></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
@@ -117,12 +123,15 @@
               ref="userLoginPwd"
               v-model="findPwd.email"
               placeholder="此账号绑定的邮箱"
+              auto-complete="on"
             ></el-input>
             <el-input
               v-else
               ref="userLoginPwd"
               v-model="findPwd.email"
               :placeholder="`此ID：` + findPwd.id + `\u3000绑定的邮箱`"
+              auto-complete="on"
+              @keyup.enter.native="submitFindPwd"
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -189,7 +198,7 @@
               placeholder="请输入邮箱账号"
             ></el-input>
           </el-form-item>
-          <el-form-item label="性别">
+          <el-form-item label="性别" @keyup.enter.native="submitFormregister">
             <el-radio v-model="ruleFormregister.userSex" label="1">男</el-radio>
             <el-radio v-model="ruleFormregister.userSex" label="0">女</el-radio>
             <el-tag type="info">注：登陆后可更换头像</el-tag>

@@ -56,12 +56,13 @@
         width="30%"
         center
       >
-        <el-form label-width="100px" class="demo-ruleForm">
+        <el-form label-width="100px" class="demo-ruleForm" auto-complete="on">
           <el-form-item label="账号">
             <el-input
               ref="userLoginId"
               v-model="ruleFormlogin.userLoginId"
               placeholder="请输入手机号"
+              auto-complete="on"
             ></el-input>
           </el-form-item>
           <el-form-item label="密码">
@@ -70,6 +71,8 @@
               v-model="ruleFormlogin.userLoginPwd"
               placeholder="请输入6-18位密码"
               show-password
+              auto-complete="on"
+              @keyup.enter.native="submitFormlogin"
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -134,7 +137,7 @@
               placeholder="请输入邮箱账号"
             ></el-input>
           </el-form-item>
-          <el-form-item label="性别" prop="registersex">
+          <el-form-item label="性别" @keyup.enter.native="submitFormregister" prop="registersex">
             <el-radio v-model="ruleFormregister.userSex" label="1">男</el-radio>
             <el-radio v-model="ruleFormregister.userSex" label="0">女</el-radio>
             <el-tag type="info">注：登陆后可更换头像</el-tag>

@@ -1,60 +1,35 @@
 @import "../css/common.css";
 @import "../css/reset.css";
 
-@media screen and (min-width: 1200px) {
-  .set_background {
-    position: fixed;
-    top: 0;
-    z-index: -2;
-    background: url("../images/7.jpg") no-repeat;
-    background-size: cover;
-    width: 100%;
-    height: 100%;
-  }
+.set_background {
+  position: fixed;
+  top: 0;
+  z-index: -2;
+  transition: all 2s;
+  background: url("../images/7.jpg") no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
 }
-@media screen and (min-width: 1200px) {
-  .set_background_h {
-    position: fixed;
-    top: 0;
-    z-index: -1;
-    background: url("../images/h.jpg") no-repeat;
-    background-size: cover;
-    width: 100%;
-    height: 100%;
-  }
+.set_background_h {
+  position: fixed;
+  top: 0;
+  z-index: -1;
+  transition: all 2s;
+  background: url("../images/h.jpg") no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
 }
-@media screen and (min-width: 1200px) {
-  .set_background_w {
-    position: fixed;
-    top: 0;
-    z-index: -1;
-    background: url("../images/w.jpg") no-repeat;
-    background-size: cover;
-    width: 100%;
-    height: 100%;
-  }
-}
-@media screen and (min-width: 600px) and (max-width: 1200px) {
-  .set_background {
-    position: fixed;
-    top: 0;
-    z-index: -2;
-    background: url('../images/7foripad.jpg');
-    background-size: cover;
-    width: 100%;
-    height: 100%;
-  }
-}
-@media screen and (max-width: 600px) {
-  .set_background {
-    position: fixed;
-    top: 0;
-    z-index: -2;
-    background: url('../images/7forphone.jpg');
-    background-size: cover;
-    width: 100%;
-    height: 100%;
-  }
+.set_background_w {
+  position: fixed;
+  top: 0;
+  z-index: -1;
+  transition: all 2s;
+  background: url("../images/w.jpg") no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
 }
 #line{
   z-index: -1;
@@ -62,25 +37,45 @@
   left: 0;
   top: 0;
 }
-.applogin-container .stimulate{
+.applogin-container .thenewjie{
+  width: 600px;
   position: absolute;
-  top: 300px;
-  left: 670px;
-  font-size: 1.8em;
-  color:white;
-  padding: 10px 20px;
+  transition: all 2s;
+  left: 260px;
+  top: 80px;
 }
-.applogin-container .stimulate:hover{
-  transition: all 1s;
+.el-timeline-item__content{
+  opacity: .5;
+}
+.el-timeline-item{
+  padding-bottom: 30px;
+}
+.applogin-container .thenewjie .stimulate{
+  font-size: 1.8em;
+  color:black;
+  padding: 10px 20px;
+  font-weight: bold;
+  height: 80px;
+}
+.applogin-container .thenewjie .stimulate:hover{
+  transition: all 4s;
   background: rgba(255, 0, 0, .8);
-  border-radius: 100px;
   box-shadow: 0 0 40px 8px red;
+  border-radius: 20px;
   cursor: url("../images/zan.png") 2 2 ,grab;
+}
+.applogin-container .thenewjie .nav_set_right ul li img{
+  float: left;
+  margin: 12px 20px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  overflow: hidden;
 }
 .applogin-container .everyStar{
   position: absolute;
-  top: 460px;
-  left: 320px;
+  top: 500px;
+  left: 360px;
   font-size: 3em;
   color: white;
   opacity: 0;
@@ -96,6 +91,25 @@
 }
 .applogin-container .nav_set{
   margin: 0px 160px;
+}
+.el-card__body{
+  height: 60px;
+}
+.applogin-container .thenewjie .nav_set_left ul li a{
+  float: left;
+  color: black;
+  font-weight: bold;
+  padding: 10px 20px;
+  margin: 6px 20px;
+  font-size: 1.6em;
+}
+.applogin-container .thenewjie .nav_set_right ul li button{
+  float: left;
+  color: black;
+  padding: 10px 20px;
+  margin: 6px 20px;
+  font-size: 1.6em;
+  font-weight: bold;
 }
 .applogin-container .nav_set .nav_set_left ul li{
   float: left;

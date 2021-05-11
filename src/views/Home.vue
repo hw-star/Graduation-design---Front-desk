@@ -1,6 +1,6 @@
 <template>
   <div class="applogin-container">
-    <nav class="nav_set">
+    <nav v-if="!tohw" class="nav_set">
       <div class="nav_set_left">
         <ul>
           <li>
@@ -48,8 +48,82 @@
     <h1 v-if="!tohw">
       青年志愿者 <i class="iconfont iconshuxian"></i>Chinese Youth Volunteers
     </h1>
+    <div v-if="tohw" class="block thenewjie">
+      <el-timeline>
+        <el-timeline-item
+          type="info"
+          size="large"
+          icon="el-icon-s-flag"
+          placement="top"
+        >
+          <el-card>
+            <div class="nav_set_left">
+              <ul>
+                <li>
+                  <router-link to="/" :title="titlemesg"
+                    ><i
+                      class="iconfont iconhongqi"
+                      style="color: red !important"
+                    ></i>
+                    青年志愿者</router-link
+                  >
+                </li>
+                <li>
+                  <router-link to="/activity">活动</router-link>
+                </li>
+                <li>
+                  <router-link to="/navigation">导航</router-link>
+                </li>
+              </ul>
+            </div>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item
+          type="info"
+          size="large"
+          icon="el-icon-star-on"
+          placement="top"
+        >
+          <el-card>
+            <div class="nav_set_right">
+              <ul v-if="isLoginOrNologin">
+                <li>
+                  <el-button type="text" @click="centerforlogin = true">
+                    <i class="iconfont icondenglu"></i>登录
+                  </el-button>
+                </li>
+                <li>
+                  <el-button type="text" @click="centerforregister = true">
+                    <i class="iconfont iconzhuce"></i>注册
+                  </el-button>
+                </li>
+              </ul>
+              <ul v-else>
+                <li>
+                  <router-link to="/about"
+                    ><img :src="this.$store.state.avatar"
+                  /></router-link>
+                </li>
+                <li>
+                  <el-button type="text" @click="loginout">
+                    <i class="iconfont icontuichu1"></i>退出
+                  </el-button>
+                </li>
+              </ul>
+            </div>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item
+          type="info"
+          size="large"
+          icon="el-icon-s-promotion"
+          placement="top"
+        >
+          <el-card class="stimulate"> 奉献、友爱、互助、进步 </el-card>
+        </el-timeline-item>
+      </el-timeline>
+    </div>
     <div style="margin: 200px" v-if="tohw"></div>
-    <div v-if="tohw" class="stimulate">奉献、友爱、互助、进步</div>
     <div v-if="tohw" class="everyStar">
       Each of us is a unique, shining star
     </div>
@@ -68,12 +142,14 @@
           ref="ruleFormlogin"
           :model="ruleFormlogin"
           :rules="ruleFormloginRules"
+          auto-complete="on"
         >
           <el-form-item label="账号" prop="userLoginId">
             <el-input
               ref="userLoginId"
               v-model="ruleFormlogin.userLoginId"
               placeholder="请输入手机号"
+              auto-complete="on"
             ></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="userLoginPwd">
@@ -82,6 +158,8 @@
               v-model="ruleFormlogin.userLoginPwd"
               placeholder="请输入6-18位密码"
               show-password
+              auto-complete="on"
+              @keyup.enter.native="submitFormlogin"
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -108,6 +186,7 @@
           ref="findPwd"
           :model="findPwd"
           :rules="findPwdRules"
+          auto-complete="on"
         >
           <el-form-item label="账号" prop="id">
             <el-input
@@ -115,6 +194,7 @@
               v-model="findPwd.id"
               placeholder="请输入账号"
               @blur="onBsp($event)"
+              auto-complete="on"
             ></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
@@ -123,12 +203,15 @@
               ref="userLoginPwd"
               v-model="findPwd.email"
               placeholder="此账号绑定的邮箱"
+              auto-complete="on"
             ></el-input>
             <el-input
               v-else
               ref="userLoginPwd"
               v-model="findPwd.email"
               :placeholder="`此ID：` + findPwd.id + `\u3000绑定的邮箱`"
+              @keyup.enter.native="submitFindPwd"
+              auto-complete="on"
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -195,7 +278,7 @@
               placeholder="请输入邮箱账号"
             ></el-input>
           </el-form-item>
-          <el-form-item label="性别">
+          <el-form-item label="性别" @keyup.enter.native="submitFormregister">
             <el-radio v-model="ruleFormregister.userSex" label="1">男</el-radio>
             <el-radio v-model="ruleFormregister.userSex" label="0">女</el-radio>
             <el-tag type="info">注：登陆后可更换头像</el-tag>
