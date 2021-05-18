@@ -331,7 +331,7 @@ export default {
       isUpdateInformation: true,
       imagecropperShow: false,
       imagecropperKey: 0,
-      BASE_API: "http://127.0.0.1:10010",
+      BASE_API: "http://39.97.253.156:10010",
 
       UserRules: {
         userId: [
