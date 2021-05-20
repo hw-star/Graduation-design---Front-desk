@@ -221,14 +221,19 @@
     <div id="data_list">
       <div class="navigation_baidu">
         <div class="logo_baidu">
-          <a href="https://www.baidu.com" target="_blank">
-            <img src="../assets/images/baidu.jpg" />
+          <a
+            href="https://chinavolunteer.mca.gov.cn/NVSI/LEAP/site/index.html#/home"
+            target="_blank"
+          >
+            <img src="../assets/images/news.png" />
           </a>
         </div>
         <div class="contianer_baidu">
           <el-form :inline="true" class="demo-form-inline">
             <el-form-item>
-              <el-input v-model="wd" placeholder="请输入搜索内容"></el-input>
+              <el-input v-model="wd" id="news_input" placeholder="请输入内容">
+                <template slot="prepend">新闻文章</template>
+              </el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">搜索</el-button>
@@ -306,8 +311,8 @@ export default {
     centerforlogin() {
       if (this.centerforlogin == true) {
         this.$nextTick(() => {
-            this.$refs.ruleFormlogin.resetFields();
-          if (this.$refs['findPwd'] !== undefined) {
+          this.$refs.ruleFormlogin.resetFields();
+          if (this.$refs["findPwd"] !== undefined) {
             this.$refs.findPwd.resetFields();
           }
         });
@@ -510,7 +515,16 @@ export default {
       this.ruleFormregister.userSex = "1";
     },
     onSubmit() {
-      window.open("https://www.baidu.com/s?wd=" + this.wd);
+      //window.open("https://www.baidu.com/s?wd=" + this.wd);
+      if (this.wd == "") {
+        this.$message("请输入搜索关键字");
+      } else {
+        window.open(
+          "https://chinavolunteer.mca.gov.cn/NVSI/LEAP/site/index.html#/news/5/" +
+            this.wd
+        );
+      }
+      this.wd = "";
     },
     yzLogin() {
       let valid = this.$store.state.avatar;
