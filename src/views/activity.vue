@@ -273,20 +273,27 @@
         </el-table-column>
         <el-table-column align="center" label="名称" prop="actName">
         </el-table-column>
+        <el-table-column align="center" label="开始日期">
+          <template slot-scope="scope">{{
+            scope.row.actTime.split(" ")[0]
+          }}</template>
+        </el-table-column>
         <el-table-column align="center" label="需求/已报人数">
           <template slot-scope="scope">
             {{ scope.row.actNumber + "/" + scope.row.actNumbered }}
           </template>
         </el-table-column>
-        <el-table-column align="center" label="开始时间" prop="actUpdate">
+        <el-table-column align="center" label="地点" prop="actAddress">
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-popover
               placement="left-start"
-              :title="`活动号：${scope.row.id}\u3000\u3000可报人数：${
+              :title="`开始日期：${
+                scope.row.actTime.split(' ')[0]
+              }\u3000\u3000可报人数：${
                 scope.row.actNumber - scope.row.actNumbered
-              }\u3000\u3000时间：${scope.row.actUpdate}`"
+              }\u3000\u3000地点：${scope.row.actAddress}`"
               width="480"
               trigger="hover"
               :content="`描述：${scope.row.actDescription}`"
