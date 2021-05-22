@@ -1,0 +1,36 @@
+@import "../css/common.css";
+@import "../css/reset.css";
+
+body{
+  background-color: rgb(239, 243, 245);
+}
+.applogin_policydetail .nav_set{
+  margin: 0px 160px;
+}
+.applogin_policydetail #nav_set_fix{
+  width: 100%;
+  background-color: rgba(255, 255, 255, .8);
+  height: 3.7em;
+  box-shadow: 0px 0px 40px 20px rgb(239, 243, 245);
+}
+.applogin_policydetail .nav_set .nav_set_left ul li{
+  float: left;
+  color: black;
+  padding: 10px 20px;
+  margin: 6px 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.applogin_policydetail #data_list{
+  margin: 20px 170px 0px 170px;
+  background-color: rgba(255, 255, 255, .8);
+  box-shadow: 0 0 2px 2px rgba(255, 255, 255, .8);
+}
+.applogin_policydetail #data_list h2{
+  text-align: center;
+  padding: 20px 0px;
+}
+.applogin_policydetail #data_list .policy_content{
+  padding: 10px 40px;
+  min-height: 548px;
+}

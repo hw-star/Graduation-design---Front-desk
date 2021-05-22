@@ -1,0 +1,94 @@
+@import "../css/common.css";
+@import "../css/reset.css";
+
+body{
+  background-color: rgb(239, 243, 245);
+}
+.applogin_policy .nav_set{
+  margin: 0px 160px;
+}
+.applogin_policy #nav_set_fix{
+  width: 100%;
+  background-color: rgba(255, 255, 255, .8);
+  height: 3.7em;
+  box-shadow: 0px 0px 40px 20px rgb(239, 243, 245);
+}
+.applogin_policy .nav_set .nav_set_left ul li{
+  float: left;
+  color: black;
+  padding: 10px 20px;
+  margin: 6px 20px;
+  font-size: 1.2em;
+}
+.applogin_policy .nav_set .nav_set_left ul li:nth-child(4){
+  border-bottom: 3px solid #4169e1;
+}
+.applogin_policy a:-webkit-any-link{
+  color: black;
+}
+.applogin_policy .nav_set .nav_set_right ul li button:hover,.applogin_policy .nav_set .nav_set_left ul li:hover{
+  border-radius: 16px;
+  border-bottom: none;
+  background: rgba(211, 211, 211, .8);
+  box-shadow: 0px 0px 8px 4px rgb(211, 211, 211);
+  cursor: pointer;
+}
+.applogin_policy .nav_set .nav_set_right ul li button{
+  float: right;
+  color: black;
+  padding: 9px 20px;
+  margin: 8px 20px;
+  font-size: 1.2em;
+  border-bottom: none;
+}
+.applogin_policy .nav_set .nav_set_right ul li img{
+  float: right;
+  margin: 12px 20px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.applogin_policy h1 i{
+  font-size: 2.2rem;
+}
+.applogin_policy .el-dialog{
+  border-radius: 24px;
+}
+.applogin_policy .el-dialog__title{
+  text-align: center;
+  font-weight: bold;
+}
+.applogin_policy .el-input{
+  width: 90%;
+}
+.applogin_policy .el-form-item__label{
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+.el-button+.el-button{
+  margin-left: 38px;
+}
+.applogin_policy .set_login .el-input__inner:hover,.applogin_policy .set_register .el-input__inner:hover{
+  box-shadow: 0px 0px 8px 4px rgb(64 158 255);
+}
+.applogin_policy .set_login .el-input__inner:focus,.applogin_policy .set_register .el-input__inner:focus{
+  box-shadow: 0px 0px 1px 1px #4169e1;
+}
+.applogin_policy .set_login .divgetPwd{
+  display: inline-block;
+  position: absolute;
+  right: 10%;
+  cursor: pointer;
+}
+.applogin_policy #data_list{
+  margin: 20px 170px 0px 170px;
+}
+.applogin_policy #data_list tr td:nth-child(2):hover{
+  cursor: pointer;
+  color: rgb(230, 0, 18);
+}
+.applogin_policy #data_list tr td:nth-child(2){
+  font-weight: bold;
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="applogin_navigation">
+  <div class="applogin_policy">
     <div id="nav_set_fix">
       <nav class="nav_set">
         <div class="nav_set_left">
@@ -221,92 +221,60 @@
       </el-dialog>
     </div>
     <div id="data_list">
-      <div class="navigation_baidu">
-        <div class="logo_baidu">
-          <a
-            href="https://chinavolunteer.mca.gov.cn/NVSI/LEAP/site/index.html#/home"
-            target="_blank"
-          >
-            <img src="../assets/images/news.png" />
-          </a>
-        </div>
-        <div class="contianer_baidu">
-          <el-form :inline="true" class="demo-form-inline">
-            <el-form-item>
-              <el-input v-model="wd" id="news_input" placeholder="请输入内容">
-                <template slot="prepend">新闻文章</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">搜索</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
-      <div class="talk">
-        志愿者是指志愿贡献个人的时间及精力，在不为任何物质报酬的情况下，为改善社会服务，促进社会进步而提供服务的人。
-        志愿工作具有志愿性、无偿性、公益性、组织性四大特征。参与志愿工作既是“助人”，亦是“自助”，既是“乐人”，同时也“乐己”。参与志愿工作，既是在帮助他人、服务社会，同时也是在传递爱心和传播文明。志愿服务个人化、人性化的特征，可以有效地拉近人与人之间的心灵距离，减少疏远感，对缓解社会矛盾，促进社会稳定有一定的积极作用。
-        <div style="color: #409eff">此模块待完善，以上内容占位</div>
-      </div>
-      <div class="recommended">
-        <div
-          style="
-            border-left: 5px solid #409eff;
-            padding-left: 10px;
-            font-weight: bold;
-          "
+      <!--数据展示-->
+      <el-table
+        :data="list"
+        v-loading="loading"
+        style="
+          width: 100%;
+          height: 519.2px;
+          border-radius: 8px;
+          padding-top: 4px;
+        "
+        :show-header="false"
+        @row-click="policyDetail"
+      >
+        <el-table-column label="序号" width="80" align="center">
+          <i class="iconfont iconyuandianlv" style="color: rgb(230, 0, 18)"></i>
+        </el-table-column>
+        <el-table-column align="left" width="520" label="标题" prop="poTitle">
+        </el-table-column>
+        <el-table-column align="center" label="来源" prop="poSource">
+        </el-table-column>
+        <el-table-column align="center" label="发布日期" prop="poTime">
+        </el-table-column>
+      </el-table>
+      <!--分页-->
+      <el-footer class="footerPage">
+        <el-pagination
+          background
+          align="center"
+          style="padding: 30px 0; text-align: center"
+          layout="total, prev, pager, next, jumper"
+          @current-change="getlist"
+          :total="total"
+          :current-page="page"
+          :page-size="limit"
         >
-          &nbsp;&nbsp;推荐导航
-        </div>
-        <div class="listLink">
-          <span
-            ><a href="http://www.zgzyz.org.cn/" target="_blank"
-              >中国青年志愿者</a
-            ></span
-          >
-          <el-divider direction="vertical"></el-divider>
-          <span
-            ><a href="https://www.chinavolunteer.cn/" target="_blank"
-              >中国志愿服务网</a
-            ></span
-          >
-          <el-divider direction="vertical"></el-divider>
-          <span
-            ><a href="https://www.cvf.org.cn/" target="_blank"
-              >中国志愿联合服务会</a
-            ></span
-          >
-          <el-divider direction="vertical"></el-divider>
-          <span
-            ><a href="http://www.chinanpo.gov.cn/" target="_blank"
-              >中国社会组织政府服务平台</a
-            ></span
-          >
-          <el-divider direction="vertical"></el-divider>
-          <span
-            ><a href="https://www.bv2008.cn/" target="_blank">志愿北京</a></span
-          >
-          <el-divider direction="vertical"></el-divider>
-          <span
-            ><a href="http://www.pubchn.com/" target="_blank">公益中国</a></span
-          >
-        </div>
-      </div>
+        </el-pagination>
+      </el-footer>
     </div>
   </div>
 </template>
 
 <script>
 import userApi from "../api/user";
+import policyApi from "../api/policy";
 import { validId, validEmail, validName } from "../utils/validate";
 export default {
-  name: "Navigation",
+  name: "Policy",
   created() {
     if (window.sessionStorage.getItem("userMsg")) {
       this.$store.replaceState(
         JSON.parse(window.sessionStorage.getItem("userMsg"))
       );
     }
+    this.getlist();
     this.yzLogin();
   },
   watch: {
@@ -375,7 +343,10 @@ export default {
       }
     };
     return {
-      wd: "",
+      page: 1, //当前页
+      limit: 11, //每页记录数
+      list: null,
+      total: 0,
       loading: false,
       titlemesg: '青年志愿者是"奉献、友爱、互助、进步"的精神。',
       ruleFormlogin: {
@@ -476,9 +447,10 @@ export default {
                     type: "success",
                   });
                   this.saveData();
+                  this.isLoginOrNologin = false;
                 })
                 .catch((error) => {});
-              this.$router.push({ path: "/navigation" });
+              this.$router.push({ path: "/policy" });
               this.centerforlogin = false;
               this.loading = false;
             })
@@ -516,18 +488,6 @@ export default {
       this.$refs["ruleFormregister"].resetFields();
       this.ruleFormregister.userSex = "1";
     },
-    onSubmit() {
-      //window.open("https://www.baidu.com/s?wd=" + this.wd);
-      if (this.wd == "") {
-        this.$message("请输入搜索关键字");
-      } else {
-        window.open(
-          "https://chinavolunteer.mca.gov.cn/NVSI/LEAP/site/index.html#/news/5/" +
-            this.wd
-        );
-      }
-      this.wd = "";
-    },
     yzLogin() {
       let valid = this.$store.state.avatar;
       if (valid != "") {
@@ -537,7 +497,7 @@ export default {
     async loginout() {
       this.isLoginOrNologin = true;
       await this.$store.dispatch("logout");
-      this.$router.push({ path: "/navigation" });
+      this.$router.push({ path: "/policy" });
       window.sessionStorage.removeItem("userMsg");
     },
     toFindP() {
@@ -592,11 +552,31 @@ export default {
         sessionStorage.setItem("userMsg", JSON.stringify(this.$store.state));
       });
     },
+    getlist(page = 1) {
+      this.page = page;
+      policyApi
+        .getPolicyListPage(this.page, this.limit)
+        .then((response) => {
+          this.list = response.data.policydata;
+          this.total = response.data.total;
+          this.loading = false;
+        })
+        .catch((error) => {});
+    },
+    policyDetail(row, column, event) {
+      let detailPage = this.$router.resolve({
+        path: "/policydetail",
+        query: {
+          id: row.id,
+        },
+      });
+      window.open(detailPage.href, "_blank");
+    },
   },
 };
 </script>
 <style scoped>
-@import "../assets/css/navigation.css";
+@import "../assets/css/policy.css";
 .el-carousel__item h3 {
   color: #475669;
   font-size: 14px;

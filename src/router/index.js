@@ -48,6 +48,25 @@ const routes = [
     component: () => import('../views/navigation.vue')
   },
   {
+    path: '/policy',
+    name: 'Policy',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // @ts-ignore
+    component: () => import('../views/policy.vue')
+  },
+  {
+    path: '/policydetail',
+    name: 'Policydetail',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // @ts-ignore
+    component: () => import('../views/policydetail.vue'),
+    hidden: true
+  },
+  {
     path: '/userorder',
     name: 'Userorder',
     // route level code-splitting

@@ -19,6 +19,9 @@
             <li>
               <router-link to="/navigation">导航</router-link>
             </li>
+            <li>
+              <router-link to="/policy">政策文件</router-link>
+            </li>
           </ul>
         </div>
         <div class="nav_set_right">
@@ -258,7 +261,6 @@
         >
       </el-form>
       <!--数据展示-->
-
       <el-table
         :data="list"
         v-loading="loading"
@@ -313,7 +315,6 @@
           </template>
         </el-table-column>
       </el-table>
-
       <!--分页-->
       <el-footer class="footerPage">
         <el-pagination
