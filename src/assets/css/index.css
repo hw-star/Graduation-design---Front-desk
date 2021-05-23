@@ -202,3 +202,11 @@ a:-webkit-any-link{
   right: 10%;
   cursor: pointer;
 }
+#mypolicy{
+  float: left;
+  color: black;
+  padding: 5.8px 20px;
+  margin: 6px 20px;
+  font-size: 1.6em;
+  font-weight: bold;
+}

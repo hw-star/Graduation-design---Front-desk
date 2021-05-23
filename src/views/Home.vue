@@ -100,6 +100,9 @@
                     <i class="iconfont iconzhuce"></i>注册
                   </el-button>
                 </li>
+                <li>
+                  <router-link id="mypolicy" to="/policy">政策文件</router-link>
+                </li>
               </ul>
               <ul v-else>
                 <li>
@@ -111,6 +114,9 @@
                   <el-button type="text" @click="loginout">
                     <i class="iconfont icontuichu1"></i>退出
                   </el-button>
+                </li>
+                <li>
+                  <router-link id="mypolicy" to="/policy">政策文件</router-link>
                 </li>
               </ul>
             </div>
