@@ -116,6 +116,7 @@ body{
   height: 100px;
   padding: 10px 0px;
   border-radius: 8px;
+  margin-bottom: 30px;
 }
 .applogin_navigation #data_list .recommended .listLink{
   padding: 30px 130px;
@@ -126,9 +127,33 @@ body{
 }
 .applogin_navigation #data_list .talk{
   margin-top: 20px;
-  background-color: rgb(255, 255, 255);
-  height: 280px;
-  padding: 30px 40px;
+  /* background-color: rgb(255, 255, 255); */
+  height: 880px;
   font-size: 1.2em;
+  border-radius: 8px;
+}
+.applogin_navigation #data_list .talk .talk_left{
+  background-color: rgb(255, 255, 255);
+  float: left;
+  width: 580px;
+  height: 860px;
+  padding: 10px 0px;
+  border-radius: 8px;
+}
+.applogin_navigation #data_list .talk .talk_left tbody tr td:nth-child(2) div{  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; 
+}
+.applogin_navigation #data_list .talk .talk_left tbody tr td:nth-child(2):hover{
+  cursor: pointer;
+  color: rgb(230, 0, 18);
+}
+.applogin_navigation #data_list .talk .talk_right{
+  background-color: rgb(255, 255, 255);
+  float: right;
+  width: 580px;
+  height: 860px;
+  padding: 10px 0px;
   border-radius: 8px;
 }

@@ -1,5 +1,6 @@
 <template>
   <div class="applogin_navigation">
+    <el-backtop></el-backtop>
     <div id="nav_set_fix">
       <nav class="nav_set">
         <div class="nav_set_left">
@@ -244,9 +245,73 @@
         </div>
       </div>
       <div class="talk">
-        志愿者是指志愿贡献个人的时间及精力，在不为任何物质报酬的情况下，为改善社会服务，促进社会进步而提供服务的人。
-        志愿工作具有志愿性、无偿性、公益性、组织性四大特征。参与志愿工作既是“助人”，亦是“自助”，既是“乐人”，同时也“乐己”。参与志愿工作，既是在帮助他人、服务社会，同时也是在传递爱心和传播文明。志愿服务个人化、人性化的特征，可以有效地拉近人与人之间的心灵距离，减少疏远感，对缓解社会矛盾，促进社会稳定有一定的积极作用。
-        <div style="color: #409eff">此模块待完善，以上内容占位</div>
+        <div class="talk_left">
+          <div
+            style="
+              border-left: 5px solid #409eff;
+              padding-left: 10px;
+              font-weight: bold;
+              font-size: 16px;
+            "
+          >
+            &nbsp;&nbsp;通知公告
+          </div>
+          <div>
+            <!-- 数据展示 -->
+            <el-table
+              style="margin-top: 6px"
+              :data="list"
+              v-loading="loading"
+              :show-header="false"
+              @row-click="noticeDetail"
+            >
+              <el-table-column label="序号" width="26" align="center">
+                <i
+                  class="iconfont iconyuandianlv"
+                  style="color: rgb(230, 0, 18)"
+                ></i>
+              </el-table-column>
+              <el-table-column
+                align="left"
+                width="390"
+                label="标题"
+                prop="noTitle"
+              >
+              </el-table-column>
+              <el-table-column align="center" label="发布日期" prop="noTime">
+              </el-table-column>
+            </el-table>
+            <!-- 分页 -->
+            <el-footer class="footerPage">
+              <el-pagination
+                background
+                align="center"
+                style="padding: 30px 0; text-align: center"
+                layout="total, prev, pager, next, jumper"
+                @current-change="getlist"
+                :total="total"
+                :current-page="page"
+                :page-size="limit"
+              >
+              </el-pagination>
+            </el-footer>
+          </div>
+        </div>
+        <div class="talk_right">
+          <div
+            style="
+              border-left: 5px solid #409eff;
+              padding-left: 10px;
+              font-weight: bold;
+              font-size: 16px;
+            "
+          >
+            &nbsp;&nbsp;志愿风采
+          </div>
+          <div>
+
+          </div>
+        </div>
       </div>
       <div class="recommended">
         <div
@@ -266,7 +331,7 @@
           >
           <el-divider direction="vertical"></el-divider>
           <span
-            ><a href="https://www.chinavolunteer.cn/" target="_blank"
+            ><a href="https://chinavolunteer.mca.gov.cn/NVSI/LEAP/site/index.html#/home" target="_blank"
               >中国志愿服务网</a
             ></span
           >
@@ -298,6 +363,7 @@
 
 <script>
 import userApi from "../api/user";
+import noticeApi from "../api/notice";
 import { validId, validEmail, validName } from "../utils/validate";
 export default {
   name: "Navigation",
@@ -307,6 +373,7 @@ export default {
         JSON.parse(window.sessionStorage.getItem("userMsg"))
       );
     }
+    this.getlist();
     this.yzLogin();
   },
   watch: {
@@ -376,6 +443,10 @@ export default {
     };
     return {
       wd: "",
+      page: 1, //当前页
+      limit: 16, //每页记录数
+      list: null,
+      total: 0,
       loading: false,
       titlemesg: '青年志愿者是"奉献、友爱、互助、进步"的精神。',
       ruleFormlogin: {
@@ -591,6 +662,26 @@ export default {
       window.addEventListener("beforeunload", () => {
         sessionStorage.setItem("userMsg", JSON.stringify(this.$store.state));
       });
+    },
+    getlist(page = 1) {
+      this.page = page;
+      noticeApi
+        .getNoticeListPage(this.page, this.limit)
+        .then((response) => {
+          this.list = response.data.noticedata;
+          this.total = response.data.total;
+          this.loading = false;
+        })
+        .catch((error) => {});
+    },
+    noticeDetail(row, column, event) {
+      let detailPage = this.$router.resolve({
+        path: "/noticedetail",
+        query: {
+          id: row.id,
+        },
+      });
+      window.open(detailPage.href, "_blank");
     },
   },
 };

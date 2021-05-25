@@ -67,6 +67,16 @@ const routes = [
     hidden: true
   },
   {
+    path: '/noticedetail',
+    name: 'Noticedetail',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // @ts-ignore
+    component: () => import('../views/noticedetail.vue'),
+    hidden: true
+  },
+  {
     path: '/userorder',
     name: 'Userorder',
     // route level code-splitting
