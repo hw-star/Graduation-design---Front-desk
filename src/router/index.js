@@ -23,45 +23,30 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     // @ts-ignore
     component: () => import('../views/about.vue')
   },
   {
     path: '/activity',
     name: 'Activity',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     // @ts-ignore
     component: () => import('../views/activity.vue')
   },
   {
     path: '/navigation',
     name: 'Navigation',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     // @ts-ignore
     component: () => import('../views/navigation.vue')
   },
   {
     path: '/policy',
     name: 'Policy',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     // @ts-ignore
     component: () => import('../views/policy.vue')
   },
   {
     path: '/policydetail',
     name: 'Policydetail',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     // @ts-ignore
     component: () => import('../views/policydetail.vue'),
     hidden: true
@@ -69,9 +54,6 @@ const routes = [
   {
     path: '/noticedetail',
     name: 'Noticedetail',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     // @ts-ignore
     component: () => import('../views/noticedetail.vue'),
     hidden: true
@@ -79,9 +61,6 @@ const routes = [
   {
     path: '/userorder',
     name: 'Userorder',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     // @ts-ignore
     component: () => import('../views/userorder.vue')
   },

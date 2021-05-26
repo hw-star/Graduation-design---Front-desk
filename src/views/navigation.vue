@@ -309,7 +309,46 @@
             &nbsp;&nbsp;志愿风采
           </div>
           <div>
-
+            <!--数据展示-->
+            <el-table
+              :data="elegant"
+              :show-header="false"
+              style="
+                width: 100%;
+                border-radius: 8px;
+                padding-top: 4px;
+              "
+            >
+              <el-table-column align="center" label="照片">
+                <template slot-scope="scope">
+                  <div class="demo-image__preview">
+                    <el-image
+                      style="width: 96px; height: 96px"
+                      :src="scope.row.elAvatar"
+                    >
+                    </el-image>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="名字" prop="elName">
+              </el-table-column>
+              <el-table-column align="center" label="发布日期" prop="elTime">
+              </el-table-column>
+            </el-table>
+            <!--分页-->
+            <el-footer class="footerPage">
+              <el-pagination
+                background
+                align="center"
+                style="padding: 30px 0; text-align: center"
+                layout="total, prev, pager, next, jumper"
+                @current-change="getlistElegant"
+                :total="totalElegant"
+                :current-page="pageElegant"
+                :page-size="limitElegant"
+              >
+              </el-pagination>
+            </el-footer>
           </div>
         </div>
       </div>
@@ -331,7 +370,9 @@
           >
           <el-divider direction="vertical"></el-divider>
           <span
-            ><a href="https://chinavolunteer.mca.gov.cn/NVSI/LEAP/site/index.html#/home" target="_blank"
+            ><a
+              href="https://chinavolunteer.mca.gov.cn/NVSI/LEAP/site/index.html#/home"
+              target="_blank"
               >中国志愿服务网</a
             ></span
           >
@@ -364,6 +405,7 @@
 <script>
 import userApi from "../api/user";
 import noticeApi from "../api/notice";
+import elegantApi from "../api/elegant";
 import { validId, validEmail, validName } from "../utils/validate";
 export default {
   name: "Navigation",
@@ -374,6 +416,7 @@ export default {
       );
     }
     this.getlist();
+    this.getlistElegant();
     this.yzLogin();
   },
   watch: {
@@ -447,6 +490,10 @@ export default {
       limit: 16, //每页记录数
       list: null,
       total: 0,
+      pageElegant: 1, //当前页
+      limitElegant: 6, //每页记录数
+      totalElegant: 0,
+      elegant: null,
       loading: false,
       titlemesg: '青年志愿者是"奉献、友爱、互助、进步"的精神。',
       ruleFormlogin: {
@@ -683,6 +730,16 @@ export default {
       });
       window.open(detailPage.href, "_blank");
     },
+    getlistElegant(pageElegant = 1) {
+      this.pageElegant = pageElegant;
+      elegantApi
+        .getElegantListPage(this.pageElegant, this.limitElegant)
+        .then((response) => {
+          this.elegant = response.data.elegantdata;
+          this.totalElegant = response.data.total;
+        })
+        .catch((error) => {});
+    },
   },
 };
 </script>
@@ -695,7 +752,6 @@ export default {
   line-height: 200px;
   margin: 0;
 }
-
 .el-carousel__item:nth-child(2n) {
   background-color: #99a9bf;
 }
