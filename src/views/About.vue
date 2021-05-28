@@ -19,6 +19,9 @@
             <li>
               <router-link to="/navigation">导航</router-link>
             </li>
+            <li>
+              <router-link to="/policy">政策文件</router-link>
+            </li>
           </ul>
         </div>
         <div class="nav_set_right">
