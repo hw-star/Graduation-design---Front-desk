@@ -4,8 +4,8 @@ import store from '../store'
 import { getToken } from '../utils/auth'
 
 const service = axios.create({
-  baseURL: "http://127.0.0.1:10010",
-  timeout: 5000
+  baseURL: "http://39.97.253.156:10010",
+  timeout: 12000
 })
 
 service.interceptors.request.use(
